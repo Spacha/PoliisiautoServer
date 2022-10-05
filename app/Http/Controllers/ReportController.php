@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreReportRequest;
-use App\Http\Requests\UpdateReportRequest;
-use App\Models\Report;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -15,16 +13,16 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return "OK!";
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreReportRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreReportRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -32,10 +30,10 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Report  $report
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Report $report)
+    public function show($id)
     {
         //
     }
@@ -43,11 +41,11 @@ class ReportController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateReportRequest  $request
-     * @param  \App\Models\Report  $report
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateReportRequest $request, Report $report)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -55,10 +53,20 @@ class ReportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Report  $report
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Report $report)
+    public function destroy($id)
+    {
+        //
+    }
+
+    /**
+     * {Description}
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function messages($id)
     {
         //
     }

@@ -60,4 +60,14 @@ class CaseController extends Controller
     {
         //
     }
+
+    /**
+     * {Description}
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reports($id)
+    {
+        //
+    }
 }

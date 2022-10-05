@@ -60,4 +60,24 @@ class TeacherController extends Controller
     {
         //
     }
+
+    /**
+     * {Description}
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function assignedReports($id)
+    {
+        //
+    }
+
+    /**
+     * {Description}
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reports($id)
+    {
+        //
+    }
 }
