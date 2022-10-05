@@ -3,9 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasRole;
+use App\Role;
 
-class Teacher extends Model
+class Teacher extends User
 {
-    use HasFactory;
+    use HasFactory, HasRole;
+
+    /**
+     * User role ID.
+     *
+     * @var int
+     */
+    public const ROLE = Role::TEACHER;
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'role' => self::ROLE,
+    ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
 }

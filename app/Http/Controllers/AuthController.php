@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Role;
+use DB;
 
 class AuthController extends Controller
 {
@@ -23,7 +25,7 @@ class AuthController extends Controller
             'device_name'   => 'required|string'
         ]);
 
-        $user = User::create([
+        $user = Student::create([
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => Hash::make($request->password)
@@ -44,8 +46,10 @@ class AuthController extends Controller
             'password'      => 'required|string',
             'device_name'   => 'required|string'
         ]);
-     
-        $user = User::where('email', $request->email)->first();
+
+        // get the user with the right class type ('role model')
+        $role = DB::table('users')->where('email', $request->email)->first('role');
+        $user = Role::getRoleModel($role->role)->where('email', $request->email)->first();
      
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

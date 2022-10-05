@@ -41,4 +41,24 @@ abstract class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The model's default values for attributes.
+     * Attribute 'role' MUST be re-defined by all heirs.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'role' => null,
+    ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new Scopes\Role);
+    }
 }
