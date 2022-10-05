@@ -15,6 +15,17 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
+            $table->text('description');
+            $table->integer('organisation_id');
+            $table->integer('case_id');
+            $table->integer('reporter_id');
+            $table->integer('assignee_id')->nullable();
+            $table->integer('bully_id')->nullable();
+            $table->integer('bullied_id')->nullable();
+            $table->boolean('is_anonymous')->default();
+            $table->integer('type');
+            $table->timestamp('opened_at')->nullable();
+            $table->timestamp('closed_at')->nullable();
             $table->timestamps();
         });
     }
