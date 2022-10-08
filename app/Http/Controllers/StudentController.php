@@ -62,7 +62,7 @@ class StudentController extends Controller
     }
 
     /**
-     * {Description}
+     * { DESCRIPTION }
      *
      * @return \Illuminate\Http\Response
      */

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Organization;
 
 class OrganizationController extends Controller
 {
@@ -13,7 +14,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        //
+        return Organization::all();
     }
 
     /**
@@ -24,7 +25,12 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'              => 'required|string|between:3,255|unique:organizations,name',
+            'street_address'    => 'required|string|between:3,255',
+            'city'              => 'required|string|between:3,255',
+            'zip'               => 'required|numeric',
+        ]);
     }
 
     /**

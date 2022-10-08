@@ -62,7 +62,7 @@ class TeacherController extends Controller
     }
 
     /**
-     * {Description}
+     * { DESCRIPTION }
      *
      * @return \Illuminate\Http\Response
      */
@@ -72,7 +72,7 @@ class TeacherController extends Controller
     }
 
     /**
-     * {Description}
+     * { DESCRIPTION }
      *
      * @return \Illuminate\Http\Response
      */

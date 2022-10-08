@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CaseController extends Controller
+class ReportCaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -62,7 +62,7 @@ class CaseController extends Controller
     }
 
     /**
-     * {Description}
+     * { DESCRIPTION }
      *
      * @return \Illuminate\Http\Response
      */

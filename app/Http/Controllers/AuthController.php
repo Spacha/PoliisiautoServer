@@ -19,16 +19,19 @@ class AuthController extends Controller
      */
     public function register(Request $request) {
         $request->validate([
-            'name'          => 'required|string|min:1|max:127',
+            'first_name'    => 'required|string|min:1|max:127',
+            'last_name'     => 'required|string|min:1|max:127',
             'email'         => 'required|string|unique:users,email|max:127',
             'password'      => 'required|string|confirmed|min:8|max:127',
+            'phone'         => 'string|min:1|max:127',
             'device_name'   => 'required|string'
         ]);
 
         $user = Student::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password)
+            'first_name'    => $request->first_name,
+            'last_name'     => $request->last_name,
+            'email'         => $request->email,
+            'password'      => Hash::make($request->password)
         ]);
 
         return $user->createToken($request->device_name)->plainTextToken;

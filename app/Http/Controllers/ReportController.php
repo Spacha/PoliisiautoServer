@@ -62,7 +62,7 @@ class ReportController extends Controller
     }
 
     /**
-     * {Description}
+     * { DESCRIPTION }
      *
      * @return \Illuminate\Http\Response
      */
