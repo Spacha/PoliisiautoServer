@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Report extends Model
+class ReportCase extends Model
 {
     use HasFactory;
 
@@ -14,11 +14,7 @@ class Report extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'description',
-        'is_anonymous',
-        'type'
-    ];
+    protected $fillable = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -32,10 +28,7 @@ class Report extends Model
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'opened_at' => 'datetime',
-        'closed_at' => 'datetime',
-    ];
+    protected $casts = [];
 
     /**
      * Get the organization that owns the case.
@@ -43,14 +36,6 @@ class Report extends Model
     public function organization()
     {
         return $this->belongsTo(Organization::class);
-    }
-
-    /**
-     * Get the case that the report belongs to.
-     */
-    public function case()
-    {
-        return $this->belongsTo(ReportCase::class);
     }
 
     /**

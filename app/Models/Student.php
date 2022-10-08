@@ -32,4 +32,20 @@ class Student extends User
      * @var string
      */
     protected $table = 'users';
+
+    /**
+     * Get the reports that the student is involved in as a bully.
+     */
+    public function bullyReports()
+    {
+        return $this->hasMany(Report::class, 'bully_id');
+    }
+
+    /**
+     * Get the reports that the student is involved in as bullied.
+     */
+    public function bulliedReports()
+    {
+        return $this->hasMany(Report::class, 'bullied_id');
+    }
 }

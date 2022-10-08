@@ -32,4 +32,12 @@ class Teacher extends User
      * @var string
      */
     protected $table = 'users';
+
+    /**
+     * Get the reports that are assigned to the teacher.
+     */
+    public function assignedReports()
+    {
+        return $this->hasMany(Report::class, 'assignee_id');
+    }
 }

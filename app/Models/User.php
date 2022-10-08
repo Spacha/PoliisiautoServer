@@ -18,7 +18,8 @@ abstract class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
     ];
@@ -60,5 +61,21 @@ abstract class User extends Authenticatable
     protected static function booted()
     {
         static::addGlobalScope(new Scopes\Role);
+    }
+
+    /**
+     * Get the reports that the user owns.
+     */
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reporter_id');
+    }
+
+    /**
+     * Get the report messages that the user owns.
+     */
+    public function reportMessages()
+    {
+        return $this->hasMany(ReportMessage::class, 'author_id');
     }
 }
