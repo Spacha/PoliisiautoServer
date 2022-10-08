@@ -31,6 +31,8 @@ class OrganizationController extends Controller
             'city'              => 'required|string|between:3,255',
             'zip'               => 'required|numeric',
         ]);
+
+        $organization = Organization::create( $request->all() );
     }
 
     /**
@@ -39,9 +41,9 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        //
+        return Organization::findOrFail($id);
     }
 
     /**
@@ -53,7 +55,14 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'              => 'required|string|between:3,255|unique:organizations,name',
+            'street_address'    => 'required|string|between:3,255',
+            'city'              => 'required|string|between:3,255',
+            'zip'               => 'required|numeric',
+        ]);
+
+        Organization::findOrFail($id)->update( $request->all() );
     }
 
     /**
@@ -64,6 +73,8 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // NOTE: All users, reports and other data
+        // in the organization will remain.
+        Organization::findOrFail($id)->delete();
     }
 }

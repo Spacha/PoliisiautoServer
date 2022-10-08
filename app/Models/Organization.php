@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use \Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
@@ -34,6 +35,18 @@ class Organization extends Model
      * @var array<string, string>
      */
     protected $casts = [];
+
+    /**
+     * Get the organization's address.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function address(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => "{$attributes['street_address']}, {$attributes['zip']} {$attributes['city']}"
+        );
+    }
 
     /**
      * Get the cases for the organization.

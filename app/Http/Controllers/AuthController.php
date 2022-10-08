@@ -52,7 +52,9 @@ class AuthController extends Controller
 
         // get the user with the right class type ('role model')
         $role = DB::table('users')->where('email', $request->email)->first('role');
-        $user = Role::getRoleModel($role->role)->where('email', $request->email)->first();
+        $user = $role
+            ? Role::getRoleModel($role->role)->where('email', $request->email)->first()
+            : null;
      
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

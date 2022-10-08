@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function () use ($ctrl) {
         // Organization
         Route::get('organizations',                     [$ctrl['Organization'], 'index']);  //< list all organizations; accessible by: no one
         Route::post('organizations',                    [$ctrl['Organization'], 'store']);  //< store a new organization; accessible by: no one
-        Route::get('organizations',                     [$ctrl['Organization'], 'show']);   //< show an organization; accessible by: by anyone
+        Route::get('organizations/{id}',                [$ctrl['Organization'], 'show']);   //< show an organization; accessible by: by anyone
         Route::patch('organizations/{id}',              [$ctrl['Organization'], 'update']);     //< update an organization; accessible by: administrators
         Route::delete('organizations/{id}',             [$ctrl['Organization'], 'destroy']);    //< delete an organization; accessible by: no one
 
