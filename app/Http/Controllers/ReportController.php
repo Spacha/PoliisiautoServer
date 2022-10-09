@@ -97,4 +97,26 @@ class ReportController extends Controller
     {
         return Report::findOrFail($id)->messages;
     }
+
+    /**
+     * Update the case of the specified report.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCase(Request $request, $id)
+    {
+        $request->validate([
+            'report_case_id' => 'number|exists:report_cases,id',
+        ]);
+
+        // associate the report with the new case
+        $case = ReportCase::findOrFail($request->case_id);
+        $case->reports()->save( Report::findOrFail($id) );
+
+        // if the old case was unnamed and now empty, remove it, as it is completely unnecessary
+        if (empty($case->name) && $case->reports->count() == 0)
+            $case->delete();
+    }
 }

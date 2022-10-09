@@ -28,7 +28,7 @@ class ReportCaseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|between:1,255'
+            'name' => 'string|between:1,255'
         ]);
 
         // store the new case under the user's organization
