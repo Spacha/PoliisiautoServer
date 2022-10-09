@@ -39,42 +39,10 @@ class ReportCase extends Model
     }
 
     /**
-     * Get the user that owns the case.
-     */
-    public function reporter()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the student who is a bully in the case.
-     */
-    public function bully()
-    {
-        return $this->belongsTo(Student::class);
-    }
-
-    /**
-     * Get the student who is a bullied in the case.
-     */
-    public function bullied()
-    {
-        return $this->belongsTo(Student::class);
-    }
-
-    /**
-     * Get the teacher who is a bullied in the case.
-     */
-    public function assignee()
-    {
-        return $this->belongsTo(Teacher::class);
-    }
-
-    /**
      * Get the report messages for the case.
      */
-    public function reportMessages()
+    public function reports()
     {
-        return $this->hasMany(ReportMessage::class);
+        return $this->hasMany(Report::class);
     }
 }

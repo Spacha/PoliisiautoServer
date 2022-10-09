@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Organization;
+use App\Models\ReportCase;
+use App\Models\Report;
 use Auth;
 
 class ReportController extends Controller
@@ -21,9 +24,10 @@ class ReportController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int $caseId
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $caseId)
     {
         $request->validate([
             'description'   => 'string|between:0,4095',
@@ -33,7 +37,12 @@ class ReportController extends Controller
             //'type'          => '',
         ]);
 
-        $organization = Organization::create( $request->all() );
+        $report = new Report( $request->all() );
+        $report->reporter_id = Auth::user()->id;
+
+        ReportCase::findOrFail($caseId)->reports()->save($report);
+
+        return response(null, 201);
     }
 
     /**
@@ -44,7 +53,7 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        return Report::findOrFail($id);
     }
 
     /**
@@ -56,7 +65,15 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'description'   => 'string|between:0,4095',
+            'bully_id'      => 'number|exists:users',
+            'bullied_id'    => 'number|exists:users',
+            'is_anonymous'  => 'required|boolean',
+            //'type'          => '',
+        ]);
+
+        Report::findOrFail($id)->update( $request->all() );
     }
 
     /**
@@ -67,16 +84,17 @@ class ReportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // NOTE: All report messages and other data in the report will remain.
+        Report::findOrFail($id)->delete();
     }
 
     /**
-     * { DESCRIPTION }
+     * Get a listing of report messages in the report.
      *
      * @return \Illuminate\Http\Response
      */
     public function messages($id)
     {
-        //
+        return Report::findOrFail($id)->reportMessages;
     }
 }

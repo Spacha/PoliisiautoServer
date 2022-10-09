@@ -63,7 +63,7 @@ Route::prefix('v1')->group(function () use ($ctrl) {
 
         // Report
         Route::get('reports',                           [$ctrl['Report'], 'index']);    //< list all reports in the organization; accessible by: teachers
-        Route::post('reports',                          [$ctrl['Report'], 'store']);    //< store a new report; accessible by: teachers + student (reporter)
+        Route::post('cases/{case_id}/reports',          [$ctrl['Report'], 'store']);    //< store a new report; accessible by: teachers + student (reporter)
         Route::get('reports/{id}',                      [$ctrl['Report'], 'show']);     //< show a report; accessible by: teachers + student (reporter)
         Route::patch('reports/{id}',                    [$ctrl['Report'], 'update']);   //< update a report; accessible by: teachers + student (reporter)
         Route::delete('reports/{id}',                   [$ctrl['Report'], 'destroy']);  //< delete a report; accessible by: teachers + student (reporter)

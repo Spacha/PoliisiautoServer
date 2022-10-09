@@ -33,6 +33,8 @@ class OrganizationController extends Controller
         ]);
 
         $organization = Organization::create( $request->all() );
+
+        return response(null, 201);
     }
 
     /**

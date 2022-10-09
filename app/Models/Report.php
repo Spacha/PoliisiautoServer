@@ -38,6 +38,15 @@ class Report extends Model
     ];
 
     /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'type' => 1,
+    ];
+
+    /**
      * Get the organization that owns the case.
      */
     public function organization()

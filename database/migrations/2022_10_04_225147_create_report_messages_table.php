@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('report_messages', function (Blueprint $table) {
             $table->id();
             $table->text('content');
+            $table->integer('report_id');
             $table->integer('author_id');
             $table->timestamps();
         });

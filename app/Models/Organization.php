@@ -61,7 +61,7 @@ class Organization extends Model
      */
     public function reports()
     {
-        return $this->hasMany(Report::class);
+        return $this->hasManyThrough(Report::class, ReportCase::class);
     }
 
     /**

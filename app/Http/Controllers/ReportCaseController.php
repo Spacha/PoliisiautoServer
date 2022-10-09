@@ -35,6 +35,8 @@ class ReportCaseController extends Controller
         Auth::user()->organization->cases()->save(
             new ReportCase( $request->all() )
         );
+
+        return response(null, 201);
     }
 
     /**

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->text('description');
-            $table->integer('case_id');
+            $table->integer('report_case_id');
             $table->integer('reporter_id');
             $table->integer('assignee_id')->nullable();
             $table->integer('bully_id')->nullable();
