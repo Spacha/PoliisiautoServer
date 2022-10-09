@@ -8,7 +8,7 @@ use App\Models\Organization;
 class OrganizationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List all existing organizations.
      *
      * @return \Illuminate\Http\Response
      */
@@ -18,7 +18,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new organization.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -38,7 +38,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get the specified organization.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -49,7 +49,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified organization.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -58,17 +58,17 @@ class OrganizationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'              => 'required|string|between:3,255|unique:organizations,name,' . $id,
-            'street_address'    => 'required|string|between:3,255',
-            'city'              => 'required|string|between:3,255',
-            'zip'               => 'required|numeric',
+            'name'              => 'string|between:3,255|unique:organizations,name,' . $id,
+            'street_address'    => 'string|between:3,255',
+            'city'              => 'string|between:3,255',
+            'zip'               => 'numeric',
         ]);
 
         Organization::findOrFail($id)->update( $request->all() );
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified organization.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

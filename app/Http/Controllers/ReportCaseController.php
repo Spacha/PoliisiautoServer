@@ -10,17 +10,17 @@ use Auth;
 class ReportCaseController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List all cases in the user's organization.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Auth::user()->organization->cases;
+        return currentOrganization()->cases;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new case to the user's organization.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -32,7 +32,7 @@ class ReportCaseController extends Controller
         ]);
 
         // store the new case under the user's organization
-        Auth::user()->organization->cases()->save(
+        currentOrganization()->cases()->save(
             new ReportCase( $request->all() )
         );
 
@@ -40,7 +40,7 @@ class ReportCaseController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get the specified case.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -54,7 +54,7 @@ class ReportCaseController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified case.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -63,14 +63,14 @@ class ReportCaseController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|between:1,255'
+            'name' => 'string|between:1,255'
         ]);
 
         ReportCase::findOrFail($id)->update( $request->all() );
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified case.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -82,8 +82,9 @@ class ReportCaseController extends Controller
     }
 
     /**
-     * Get a list of the reports in the case.
+     * List all the reports in the case.
      *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function reports($id)

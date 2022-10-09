@@ -5,6 +5,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
 /**
+ * Get the authenticated user's organization.
+ */
+function currentOrganization() {
+    return Auth::user()->organization;
+}
+
+/**
  * Called by router when a type hinted resource is not found.
  */
 function resourceNotFound(Request $request) {

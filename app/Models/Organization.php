@@ -41,7 +41,7 @@ class Organization extends Model
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    protected function address(): Attribute
+    protected function address() : Attribute
     {
         return Attribute::make(
             get: fn ($value, $attributes) => "{$attributes['street_address']}, {$attributes['zip']} {$attributes['city']}"

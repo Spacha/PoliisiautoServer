@@ -70,7 +70,7 @@ Route::prefix('v1')->group(function () use ($ctrl) {
         Route::get('reports/{id}/messages',             [$ctrl['Report'], 'messages']);     //< list all report messages in the report; accessible by: teachers
 
         // Report message
-        Route::post('cases/{case_id}/messages',         [$ctrl['ReportMessage'], 'store']);     //< store a new report message to the report; accessible by: teachers + student (reporter)
+        Route::post('reports/{report_id}/messages',     [$ctrl['ReportMessage'], 'store']);     //< store a new report message to the report; accessible by: teachers + student (reporter)
         Route::get('report-messages/{id}',              [$ctrl['ReportMessage'], 'show']);  //< show a report message; accessible by: teachers + student (reporter)
         Route::patch('report-messages/{id}',            [$ctrl['ReportMessage'], 'update']);    //< update a report message; accessible by: teachers + student (reporter)
         Route::delete('report-messages/{id}',           [$ctrl['ReportMessage'], 'destroy']);   //< delete a report message; accessible by: teachers + student (reporter)
@@ -82,6 +82,7 @@ Route::prefix('v1')->group(function () use ($ctrl) {
         Route::patch('students/{id}',                   [$ctrl['Student'], 'update']);  //< update a student; accessible by: students + student (self)
         Route::delete('students/{id}',                  [$ctrl['Student'], 'destroy']);     //< delete a student; accessible by: administrators
         Route::get('students/{id}/reports',             [$ctrl['Student'], 'reports']);     //< list all reports the student has created; accessible by: teachers + student (self)
+        Route::get('students/{id}/involved-reports',    [$ctrl['Student'], 'involvedReports']);     //< list all reports the student is involved in; accessible by: teachers
 
         // Teacher
         Route::get('teachers',                          [$ctrl['Teacher'], 'index']);   //< list all teachers in the organization; accessible by: by anyone
@@ -89,8 +90,8 @@ Route::prefix('v1')->group(function () use ($ctrl) {
         Route::get('teachers/{id}',                     [$ctrl['Teacher'], 'show']);    //< show a teacher; accessible by: by anyone
         Route::patch('teachers/{id}',                   [$ctrl['Teacher'], 'update']);  //< update a teacher; accessible by: administrators + teacher (self)
         Route::delete('teachers/{id}',                  [$ctrl['Teacher'], 'destroy']);     //< delete a teacher; accessible by: administrators
-        Route::get('teachers/{id}/assigned-reports',    [$ctrl['Teacher'], 'assignedReports']);     //< list all reports assigned to the teacher; accessible by: teachers
         Route::get('teachers/{id}/reports',             [$ctrl['Teacher'], 'reports']);     //< list all reports the teacher has created; accessible by: teachers
+        Route::get('teachers/{id}/assigned-reports',    [$ctrl['Teacher'], 'assignedReports']);     //< list all reports assigned to the teacher; accessible by: teachers
 
         // Administrator
         Route::get('administrators',                    [$ctrl['Administrator'], 'index']);     //< list all administrators in the organization; accessible by: administrators

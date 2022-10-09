@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Role;
+use Auth;
 use DB;
 
 class AuthController extends Controller
 {
     /**
-     * Try logging in. If successful, create and return an API token.
+     * Register a new user (student). If successful, create and return an API token.
      * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -72,6 +73,6 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function logout(Request $request) {
-        // ...
+        Auth::user()->currentAccessToken()->delete();
     }
 }

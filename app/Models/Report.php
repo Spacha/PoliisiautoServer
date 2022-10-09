@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use \Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
@@ -17,7 +18,9 @@ class Report extends Model
     protected $fillable = [
         'description',
         'is_anonymous',
-        'type'
+        'type',
+        'bully_id',
+        'bullied_id',
     ];
 
     /**
@@ -43,8 +46,77 @@ class Report extends Model
      * @var array
      */
     protected $attributes = [
-        'type' => 1,
+        'type'          => 1,
+        'is_anonymous'  => true,
     ];
+
+    /**
+     * Get if the report has been opened.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function isOpened() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => !empty($attributes['opened_at']),
+        );
+    }
+
+    /**
+     * Get if the report has been closed.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function isClosed() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => !empty($attributes['closed_at']),
+        );
+    }
+
+    /**
+     * Get the current status of the report.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function status() : Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                $opened = !empty($attributes['opened_at']);
+                $closed = !empty($attributes['closed_at']);
+
+                if (! $opened && ! $closed)
+                    return 'PENDING';
+                if ($opened && ! $closed)
+                    return 'OPENED';
+                if ($closed)
+                    return 'CLOSED';
+            }
+        );
+    }
+
+    /**
+     * Open the report.
+     *
+     * @return \App\Models\Report
+     */
+    public function open() : Report
+    {
+        $this->opened_at = now();
+        return $this;
+    }
+
+    /**
+     * Close the report.
+     *
+     * @return \App\Models\Report
+     */
+    public function close() : Report
+    {
+        $this->closed_at = now();
+        return $this;
+    }
 
     /**
      * Get the organization that owns the case.
@@ -95,9 +167,9 @@ class Report extends Model
     }
 
     /**
-     * Get the report messages for the case.
+     * Get the messages for the report.
      */
-    public function reportMessages()
+    public function messages()
     {
         return $this->hasMany(ReportMessage::class);
     }

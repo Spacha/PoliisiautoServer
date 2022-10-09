@@ -11,17 +11,17 @@ use Auth;
 class ReportController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List all reports in the user's organization.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Auth::user()->organization->reports;
+        return currentOrganization()->reports;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new report to the specified case.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int $caseId
@@ -31,8 +31,8 @@ class ReportController extends Controller
     {
         $request->validate([
             'description'   => 'string|between:0,4095',
-            'bully_id'      => 'number|exists:users',
-            'bullied_id'    => 'number|exists:users',
+            'bully_id'      => 'numeric|exists:users,id',
+            'bullied_id'    => 'numeric|exists:users,id',
             'is_anonymous'  => 'required|boolean',
             //'type'          => '',
         ]);
@@ -46,7 +46,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get the specified report.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -57,7 +57,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified report.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -69,7 +69,7 @@ class ReportController extends Controller
             'description'   => 'string|between:0,4095',
             'bully_id'      => 'number|exists:users',
             'bullied_id'    => 'number|exists:users',
-            'is_anonymous'  => 'required|boolean',
+            'is_anonymous'  => 'boolean',
             //'type'          => '',
         ]);
 
@@ -77,7 +77,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified report.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -89,12 +89,12 @@ class ReportController extends Controller
     }
 
     /**
-     * Get a listing of report messages in the report.
+     * List all the messages in the report.
      *
      * @return \Illuminate\Http\Response
      */
     public function messages($id)
     {
-        return Report::findOrFail($id)->reportMessages;
+        return Report::findOrFail($id)->messages;
     }
 }
