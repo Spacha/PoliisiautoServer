@@ -67,7 +67,7 @@ class Organization extends Model
     /**
      * Get the studetns for the organization.
      */
-    public function studetns()
+    public function students()
     {
         return $this->hasMany(Student::class);
     }
@@ -81,9 +81,9 @@ class Organization extends Model
     }
 
     /**
-     * Get the administrator for the organization.
+     * Get the administrators for the organization.
      */
-    public function administrator()
+    public function administrators()
     {
         return $this->hasMany(Administrator::class);
     }

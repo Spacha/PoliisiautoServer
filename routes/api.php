@@ -23,7 +23,7 @@ use App\Http\Controllers;
 $ctrl = [
     'Auth'          => Controllers\AuthController::class,
     'Organization'  => Controllers\OrganizationController::class,
-    'Case'          => Controllers\CaseController::class,
+    'Case'          => Controllers\ReportCaseController::class,
     'Report'        => Controllers\ReportController::class,
     'ReportMessage' => Controllers\ReportMessageController::class,
     'Student'       => Controllers\StudentController::class,

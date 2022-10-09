@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class ReportController extends Controller
 {
@@ -13,7 +14,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
+        return Auth::user()->organization->reports;
     }
 
     /**
@@ -24,7 +25,15 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'description'   => 'string|between:0,4095',
+            'bully_id'      => 'number|exists:users',
+            'bullied_id'    => 'number|exists:users',
+            'is_anonymous'  => 'required|boolean',
+            //'type'          => '',
+        ]);
+
+        $organization = Organization::create( $request->all() );
     }
 
     /**

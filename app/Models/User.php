@@ -5,8 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use \Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Role;
 
 abstract class User extends Authenticatable
 {
@@ -61,6 +63,56 @@ abstract class User extends Authenticatable
     protected static function booted()
     {
         static::addGlobalScope(new Scopes\Role);
+    }
+
+    /**
+     * Get the organization's address.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function role() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Role::forHumans($value)
+        );
+    }
+
+    /**
+     * Get if the user is student.
+     *
+     * @return bool
+     */
+    public function isStudent() : bool
+    {
+        return $this->role == Role::STUDENT;
+    }
+
+    /**
+     * Get if the user is teacher.
+     *
+     * @return bool
+     */
+    public function isTeacher() : bool
+    {
+        return $this->role == Role::TEACHER;
+    }
+
+    /**
+     * Get if the user is administrator.
+     *
+     * @return bool
+     */
+    public function isAdministrator() : bool
+    {
+        return $this->role == Role::ADMINISTRATOR;
+    }
+
+    /**
+     * Get the organization that the user belongs to.
+     */
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
     }
 
     /**

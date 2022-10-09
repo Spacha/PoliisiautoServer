@@ -56,7 +56,7 @@ class OrganizationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'              => 'required|string|between:3,255|unique:organizations,name',
+            'name'              => 'required|string|between:3,255|unique:organizations,name,' . $id,
             'street_address'    => 'required|string|between:3,255',
             'city'              => 'required|string|between:3,255',
             'zip'               => 'required|numeric',
