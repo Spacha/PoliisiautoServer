@@ -34,10 +34,10 @@ class Teacher extends User
     protected $table = 'users';
 
     /**
-     * Get the reports that are assigned to the teacher.
+     * Get the reports in which the teacher is a handler.
      */
     public function assignedReports()
     {
-        return $this->hasMany(Report::class, 'assignee_id');
+        return $this->hasMany(Report::class, 'handler_id');
     }
 }

@@ -83,7 +83,7 @@ class TeacherController extends Controller
     }
 
     /**
-     * List all the reports assigned to the specified teacher.
+     * List all the reports in which the specified teacher is the handler.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

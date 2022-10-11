@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('report_case_id');
             $table->integer('reporter_id');
-            $table->integer('assignee_id')->nullable();
+            $table->integer('handler_id')->nullable();
             $table->integer('bully_id')->nullable();
             $table->integer('bullied_id')->nullable();
             $table->boolean('is_anonymous')->default();

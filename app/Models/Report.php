@@ -159,9 +159,9 @@ class Report extends Model
     }
 
     /**
-     * Get the teacher who is a bullied in the case.
+     * Get the teacher who is the handler of the case.
      */
-    public function assignee()
+    public function handler()
     {
         return $this->belongsTo(Teacher::class);
     }
