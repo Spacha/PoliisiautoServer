@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('handler_id')->nullable();
             $table->integer('bully_id')->nullable();
             $table->integer('bullied_id')->nullable();
-            $table->boolean('is_anonymous')->default();
+            $table->boolean('is_anonymous')->default(true);
             $table->integer('type');
             $table->timestamp('opened_at')->nullable();
             $table->timestamp('closed_at')->nullable();

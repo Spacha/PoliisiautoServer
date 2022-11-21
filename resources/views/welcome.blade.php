@@ -41,7 +41,7 @@
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex align-items-center">
-                    <img class="mr-2" style="height: 80px;" src="storage/logo.svg" />
+                    <img class="mr-2" style="height: 80px;" src="/storage/logo.svg" />
                     <h1 style="color: #fff;">Poliisiauto API v1</h1>
                 </div>
             </div>
