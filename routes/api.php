@@ -44,7 +44,10 @@ Route::prefix('v1')->group(function () use ($ctrl) {
     // Protected routes
     Route::group(['middleware' => ['auth:sanctum']], function () use ($ctrl) {
 
+        // Auth routes
         Route::post('logout', [$ctrl['Auth'], 'logout']);
+        Route::get('profile', [$ctrl['Auth'], 'profile']);
+        Route::get('profile/organization', [$ctrl['Auth'], 'organization']);
 
         // Organization
         Route::get('organizations',                     [$ctrl['Organization'], 'index']);          //< list all organizations; accessible by: no one
@@ -69,6 +72,7 @@ Route::prefix('v1')->group(function () use ($ctrl) {
         Route::delete('reports/{id}',                   [$ctrl['Report'], 'destroy']);              //< delete a report; accessible by: teachers + student (reporter)
         Route::get('reports/{id}/messages',             [$ctrl['Report'], 'messages']);             //< list all report messages in the report; accessible by: teachers
         Route::put('reports/{id}/update-case',          [$ctrl['Report'], 'updateCase']);           //< update the case of the report; accessible by: teachers
+        Route::post('reports',                          [$ctrl['Report'], 'storeToNewCase']);       //< store a new report to a new case; accessible by: teachers + student (reporter)
 
         // Report message
         Route::post('reports/{report_id}/messages',     [$ctrl['ReportMessage'], 'store']);         //< store a new report message to the report; accessible by: teachers + student (reporter)

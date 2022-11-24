@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Role;
 use Auth;
+use Log;
 use DB;
 
 class AuthController extends Controller
@@ -34,6 +35,8 @@ class AuthController extends Controller
             'email'         => $request->email,
             'password'      => Hash::make($request->password)
         ]);
+
+        Log::debug("User $user->email registered.");
 
         return $user->createToken($request->device_name)->plainTextToken;
     }
@@ -62,6 +65,8 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+
+        Log::debug("User $user->email logged in.");
      
         return $user->createToken($request->device_name)->plainTextToken;
     }
@@ -73,6 +78,25 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function logout(Request $request) {
+        Log::debug("User " . Auth::user()->email . " logged out.");
         Auth::user()->currentAccessToken()->delete();
+    }
+
+    /**
+     * Get the currently authenticated user.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function profile() {
+        return Auth::user();
+    }
+
+    /**
+     * Get the currently authenticated user's organization.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function organization() {
+        return Auth::user()->organization;
     }
 }

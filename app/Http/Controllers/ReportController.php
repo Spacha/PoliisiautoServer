@@ -30,9 +30,10 @@ class ReportController extends Controller
     public function store(Request $request, $caseId)
     {
         $request->validate([
-            'description'   => 'string|between:0,4095',
-            'bully_id'      => 'numeric|exists:users,id',
-            'bullied_id'    => 'numeric|exists:users,id',
+            'description'   => 'string|between:0,2048',
+            'bully_id'      => 'nullable|numeric|exists:users,id',
+            'bullied_id'    => 'nullable|numeric|exists:users,id',
+            'assignee_id'   => 'nullable|number|exists:users',
             'is_anonymous'  => 'required|boolean',
             //'type'          => '',
         ]);
@@ -66,9 +67,10 @@ class ReportController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'description'   => 'string|between:0,4095',
-            'bully_id'      => 'number|exists:users',
-            'bullied_id'    => 'number|exists:users',
+            'description'   => 'string|between:0,2048',
+            'bully_id'      => 'nullable|number|exists:users',
+            'bullied_id'    => 'nullable|number|exists:users',
+            'assignee_id'   => 'nullable|number|exists:users',
             'is_anonymous'  => 'boolean',
             //'type'          => '',
         ]);
@@ -118,5 +120,23 @@ class ReportController extends Controller
         // if the old case was unnamed and now empty, remove it, as it is completely unnecessary
         if (empty($case->name) && $case->reports->count() == 0)
             $case->delete();
+    }
+
+    /**
+     * Store a new report to a new case.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeToNewCase(Request $request)
+    {
+        \Log::debug($request->all());
+        // store a new, empty case under the user's organization
+        $case = currentOrganization()->cases()->save(
+            new ReportCase()
+        );
+
+        // and store normally under it
+        return $this->store($request, $case->id);
     }
 }
