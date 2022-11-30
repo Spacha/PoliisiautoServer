@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\ReportCollection;
+use App\Http\Resources\ReportResource;
 use App\Models\Organization;
 use App\Models\ReportCase;
 use App\Models\Report;
@@ -17,7 +19,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return currentOrganization()->reports;
+        return new ReportCollection(currentOrganization()->reports);
     }
 
     /**
@@ -54,7 +56,7 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        return Report::findOrFail($id);
+        return new ReportResource(Report::findOrFail($id));
     }
 
     /**

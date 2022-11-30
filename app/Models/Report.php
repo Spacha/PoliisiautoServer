@@ -139,7 +139,10 @@ class Report extends Model
      */
     public function reporter()
     {
-        return $this->belongsTo(User::class);
+        // FIXME: Obviously we should not do this :()
+        $role = \DB::table('users')->where('id', $this->reporter_id)->first('role');
+        return $this->belongsTo(\App\Role::getRoleModel($role->role));
+        //return $this->belongsTo(User::class);
     }
 
     /**
