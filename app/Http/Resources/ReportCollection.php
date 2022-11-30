@@ -21,7 +21,7 @@ class ReportCollection extends ResourceCollection
                 'id'                        => $res->id,
                 'description'               => $res->description,
                 'report_case_id'            => $res->report_case_id,
-                'reporter_id'               => $res->reporter_id,
+                'reporter_id'               => !$res->is_anonymous ? ($res->reporter_id ?? null) : null,
                 'handler_id'                => $res->handler_id,
                 'bully_id'                  => $res->bully_id,
                 'bullied_id'                => $res->bullied_id,
@@ -31,7 +31,7 @@ class ReportCollection extends ResourceCollection
                 'closed_at'                 => $res->closed_at,
                 'created_at'                => $res->created_at,
 
-                'reporter_name'             => $res->reporter->name ?? null,
+                'reporter_name'             => !$res->is_anonymous ? ($res->reporter->name ?? null) : null,
             ];
         });
         // return parent::toArray($request);

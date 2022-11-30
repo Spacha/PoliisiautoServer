@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('content');
             $table->integer('report_id');
             $table->integer('author_id');
-            $table->boolean('is_anonymous');
+            $table->boolean('is_anonymous')->default(false);
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ class ReportResource extends JsonResource
             'id'                        => $this->id,
             'description'               => $this->description,
             'report_case_id'            => $this->report_case_id,
-            'reporter_id'               => $this->reporter_id,
+            'reporter_id'               => !$this->is_anonymous ? ($this->reporter_id ?? null) : null,
             'handler_id'                => $this->handler_id,
             'bully_id'                  => $this->bully_id,
             'bullied_id'                => $this->bullied_id,
