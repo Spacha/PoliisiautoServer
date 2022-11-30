@@ -18,7 +18,8 @@ class ReportMessageController extends Controller
     public function store(Request $request, $reportId)
     {
         $request->validate([
-            'content' => 'string|between:0,4095',
+            'content'       => 'string|between:0,4095',
+            'is_anonymous'  => 'required|boolean',
         ]);
 
         $message = new ReportMessage( $request->all() );
@@ -50,7 +51,8 @@ class ReportMessageController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'content' => 'string|between:0,4095',
+            'content'       => 'string|between:0,4095',
+            'is_anonymous'  => 'required|boolean',
         ]);
 
         ReportMessage::findOrFail($id)->update( $request->all() );

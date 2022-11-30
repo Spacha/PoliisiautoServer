@@ -14,7 +14,7 @@ class ReportMessage extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['content'];
+    protected $fillable = ['content', 'is_anonymous'];
 
     /**
      * The attributes that should be hidden for serialization.
