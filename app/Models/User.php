@@ -66,7 +66,7 @@ abstract class User extends Authenticatable
     }
 
     /**
-     * Get the organization's address.
+     * Get the user's role.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
@@ -74,6 +74,18 @@ abstract class User extends Authenticatable
     {
         return Attribute::make(
             get: fn ($value) => Role::forHumans($value)
+        );
+    }
+
+    /**
+     * Get the user's whole name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function name() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => $attributes['first_name'] . ' ' . $attributes['last_name']
         );
     }
 
