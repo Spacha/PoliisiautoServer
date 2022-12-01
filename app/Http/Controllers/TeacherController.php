@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReportCollection;
 use Illuminate\Http\Request;
 use App\Models\Teacher;
 
@@ -79,7 +80,7 @@ class TeacherController extends Controller
      */
     public function reports($id)
     {
-        return Teacher::findOrFail($id)->reports;
+        return new ReportCollection(Teacher::findOrFail($id)->reports);
     }
 
     /**
@@ -90,6 +91,6 @@ class TeacherController extends Controller
      */
     public function assignedReports($id)
     {
-        return Teacher::findOrFail($id)->assignedReports;
+        return new ReportCollection(Teacher::findOrFail($id)->assignedReports);
     }
 }

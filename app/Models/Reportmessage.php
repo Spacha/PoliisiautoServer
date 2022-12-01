@@ -43,6 +43,11 @@ class ReportMessage extends Model
      */
     public function author()
     {
-        return $this->belongsTo(User::class);
+        // FIXME: Obviously we should not do this :()
+        $role = \DB::table('users')->where('id', $this->author_id)->first('role');
+        return !empty($role)
+            ? $this->belongsTo(\App\Role::getRoleModel($role->role))
+            : null;
+        //return $this->belongsTo(User::class);
     }
 }

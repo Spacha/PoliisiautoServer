@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\ReportCollection;
+use App\Http\Resources\ReportMessageCollection;
 use App\Http\Resources\ReportResource;
 use App\Models\Organization;
 use App\Models\ReportCase;
@@ -99,7 +100,7 @@ class ReportController extends Controller
      */
     public function messages($id)
     {
-        return Report::findOrFail($id)->messages;
+        return new ReportMessageCollection(Report::findOrFail($id)->messages);
     }
 
     /**

@@ -30,7 +30,6 @@ class ReportResource extends JsonResource
             'closed_at'                 => $this->closed_at,
             'created_at'                => $this->created_at,
 
-            // FIXME: Temp!
             'reporter_name'             => !$this->is_anonymous ? ($this->reporter->name ?? null) : null,
             'bully_name'                => $this->bully->name ?? null,
             'bullied_name'             => $this->bullied->name ?? null,

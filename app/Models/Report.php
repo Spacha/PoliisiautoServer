@@ -136,12 +136,20 @@ class Report extends Model
 
     /**
      * Get the user that owns the case.
+     * 
+     * Since App\Models\User is abstract, we cannot initialize it.
+     * This forces us to make an ugly hack like this. This makes one extra
+     * SQL query, which is not good.
+     * 
+     * FIXME: Read above. Perhaps we'd have to make User non-abstract after all :(.
      */
     public function reporter()
     {
         // FIXME: Obviously we should not do this :()
         $role = \DB::table('users')->where('id', $this->reporter_id)->first('role');
-        return $this->belongsTo(\App\Role::getRoleModel($role->role));
+        return !empty($role)
+            ? $this->belongsTo(\App\Role::getRoleModel($role->role))
+            : null;
         //return $this->belongsTo(User::class);
     }
 
