@@ -36,7 +36,7 @@ class ReportController extends Controller
             'description'   => 'string|between:0,2048',
             'bully_id'      => 'nullable|numeric|exists:users,id',
             'bullied_id'    => 'nullable|numeric|exists:users,id',
-            'assignee_id'   => 'nullable|number|exists:users',
+            'handler_id'    => 'nullable|numeric|exists:users,id',
             'is_anonymous'  => 'required|boolean',
             //'type'          => '',
         ]);
@@ -71,10 +71,10 @@ class ReportController extends Controller
     {
         $request->validate([
             'description'   => 'string|between:0,2048',
-            'bully_id'      => 'nullable|number|exists:users',
-            'bullied_id'    => 'nullable|number|exists:users',
-            'assignee_id'   => 'nullable|number|exists:users',
-            'is_anonymous'  => 'boolean',
+            'bully_id'      => 'nullable|numeric|exists:users,id',
+            'bullied_id'    => 'nullable|numeric|exists:users,id',
+            'handler_id'    => 'nullable|numeric|exists:users,id',
+            'is_anonymous'  => 'nullable|boolean',
             //'type'          => '',
         ]);
 
@@ -113,7 +113,7 @@ class ReportController extends Controller
     public function updateCase(Request $request, $id)
     {
         $request->validate([
-            'report_case_id' => 'number|exists:report_cases,id',
+            'report_case_id' => 'numeric|exists:report_cases,id',
         ]);
 
         // associate the report with the new case
