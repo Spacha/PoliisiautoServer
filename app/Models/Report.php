@@ -21,6 +21,7 @@ class Report extends Model
         'type',
         'bully_id',
         'bullied_id',
+        'handler_id',
     ];
 
     /**
