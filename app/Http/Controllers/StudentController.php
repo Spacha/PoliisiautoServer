@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Auth;
 
 class StudentController extends Controller
 {
@@ -79,6 +80,12 @@ class StudentController extends Controller
      */
     public function reports($id)
     {
+        // TODO: Use guards/policies!
+
+        // only the student themself or a teacher can view
+        if (Auth::user()->is_student && Auth::user()->id != $id)
+            return response()->json("Unauthorized.", 401);
+
         return Student::findOrFail($id)->reports;
     }
 
