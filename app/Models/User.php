@@ -96,7 +96,9 @@ abstract class User extends Authenticatable
      */
     public function isStudent() : bool
     {
-        return $this->role == Role::STUDENT;
+        // FIXME: Not like this!
+        return $this->role == Role::forHumans(Role::STUDENT);
+        //return $this->role == Role::STUDENT;
     }
 
     /**
@@ -106,7 +108,9 @@ abstract class User extends Authenticatable
      */
     public function isTeacher() : bool
     {
-        return $this->role == Role::TEACHER;
+        // FIXME: Not like this!
+        return $this->role == Role::forHumans(Role::TEACHER);
+        //return $this->role == Role::TEACHER;
     }
 
     /**
@@ -116,7 +120,9 @@ abstract class User extends Authenticatable
      */
     public function isAdministrator() : bool
     {
+        // FIXME: Not like this!
         return $this->role == Role::ADMINISTRATOR;
+        //return $this->role == Role::ADMINSITRATOR;
     }
 
     /**
