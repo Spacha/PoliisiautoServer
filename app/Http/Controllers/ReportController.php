@@ -23,10 +23,8 @@ class ReportController extends Controller
         // TODO: Use guards/policies!
 
         // only teachers can view
-        if (!Auth::user()->is_teacher) {
-            dd(Auth::user()->isTeacher());
+        if (!Auth::user()->is_teacher)
             return response()->json("Unauthorized.", 401);
-        }
 
         return new ReportCollection(currentOrganization()->reports);
     }
