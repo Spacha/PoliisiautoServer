@@ -83,7 +83,7 @@ class StudentController extends Controller
         // TODO: Use guards/policies!
 
         // only the student themself or a teacher can view
-        if (Auth::user()->is_student && Auth::user()->id != $id)
+        if (Auth::user()->isStudent() && Auth::user()->id != $id)
             return response()->json("Unauthorized.", 401);
 
         return Student::findOrFail($id)->reports;
