@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Resources\ReportCollection;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use Auth;
@@ -86,7 +87,7 @@ class StudentController extends Controller
         if (Auth::user()->isStudent() && Auth::user()->id != $id)
             return response()->json("Unauthorized.", 401);
 
-        return Student::findOrFail($id)->reports;
+        return new ReportCollection(Student::findOrFail($id)->reports);
     }
 
     /**
@@ -99,8 +100,8 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
 
         return collect([
-            'bullied'   => $student->bulliedReports,
-            'bully'     => $student->bullyReports
+            'bullied'   => new ReportCollection($student->bulliedReports),
+            'bully'     => new ReportCollection($student->bullyReports)
         ]);
     }
 }
