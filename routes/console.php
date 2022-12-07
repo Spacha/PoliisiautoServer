@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright (c) 2022, Miika Sikala, Essi Passoja, Lauri Klemettilä
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 

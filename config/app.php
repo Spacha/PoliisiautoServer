@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Copyright (c) 2022, Miika Sikala, Essi Passoja, Lauri Klemettilä
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -15,7 +21,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'PoliisiautoServer'),
 
     /*
     |--------------------------------------------------------------------------
