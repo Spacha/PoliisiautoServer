@@ -10,7 +10,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReportResource extends JsonResource
+class ReportMessageResource extends JsonResource
 {
     public static $wrap = null;
 
