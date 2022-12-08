@@ -10,6 +10,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Organization;
+use App\Http\Resources\OrganizationResource;
+use App\Http\Resources\OrganizationCollection;
 
 class OrganizationController extends Controller
 {
@@ -20,7 +22,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        return Organization::all();
+        return new OrganizationCollection(Organization::all());
     }
 
     /**
@@ -51,7 +53,7 @@ class OrganizationController extends Controller
      */
     public function show($id)
     {
-        return Organization::findOrFail($id);
+        return new OrganizationResource(Organization::findOrFail($id));
     }
 
     /**

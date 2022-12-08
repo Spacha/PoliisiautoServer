@@ -12,6 +12,8 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Http\Resources\ProfileResource;
+use App\Http\Resources\OrganizationResource;
 use App\Role;
 use Auth;
 use Log;
@@ -94,7 +96,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profile() {
-        return Auth::user();
+        return new ProfileResource(Auth::user());
     }
 
     /**
@@ -103,6 +105,6 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function organization() {
-        return Auth::user()->organization;
+        return new OrganizationResource(Auth::user()->organization);
     }
 }
