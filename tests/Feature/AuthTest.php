@@ -40,7 +40,7 @@ class AuthTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_can_get_profile()
+    public function test_self_can_get_profile()
     {
         $student = $this->actingAsStudent();
 

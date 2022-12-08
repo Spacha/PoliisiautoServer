@@ -43,14 +43,17 @@ class TeacherTest extends TestCase
         ]);
     }
 
-    public function test_student_cannot_show()
+    public function test_student_can_show()
     {
         $organization = Organization::factory()->create();
         $this->actingAsStudent($organization->id);
         $teacher = Teacher::factory()->forOrganization($organization->id)->create();
 
         $response = $this->getJson($this->api("teachers/$teacher->id"));
-        $response->assertUnauthorized();
+        $response->assertOk()->assertJson([
+            'id' => $teacher->id,
+            'email' => $teacher->email,
+        ]);
     }
 
     public function test_can_update()

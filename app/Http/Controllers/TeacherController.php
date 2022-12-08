@@ -23,9 +23,11 @@ class TeacherController extends Controller
      */
     public function index()
     {
+        $organization = currentOrganization();
+        $this->authorize('list-teachers', $organization);
         // TODO: Add an endpoint for getting user names and ids only that
         //       is accessible by everyone in the organization!
-        return new TeacherCollection(currentOrganization()->teachers);
+        return new TeacherCollection($organization->teachers);
     }
 
     /**
@@ -48,7 +50,10 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        return new TeacherResource(Teacher::findOrFail($id));
+        $teacher = Teacher::findOrFail($id);
+        $this->authorize('show-teacher', $teacher);
+
+        return new TeacherResource($teacher);
     }
 
     /**
@@ -68,7 +73,10 @@ class TeacherController extends Controller
             'phone'         => 'string|min:1|max:127',
         ]);
 
-        Teacher::findOrFail($id)->update( $request->except(['password']) );
+        $teacher = Teacher::findOrFail($id);
+        $this->authorize('update-teacher', $teacher);
+
+        $teacher->update( $request->except(['password']) );
     }
 
     /**
@@ -79,6 +87,9 @@ class TeacherController extends Controller
      */
     public function destroy($id)
     {
+        $teacher = Teacher::findOrFail($id);
+        $this->authorize('delete-teacher', $teacher);
+
         // NOTE: All reports and other data belonging to the user will remain.
         Teacher::findOrFail($id)->delete();
     }
@@ -90,7 +101,10 @@ class TeacherController extends Controller
      */
     public function reports($id)
     {
-        return new ReportCollection(Teacher::findOrFail($id)->reports);
+        $teacher = Teacher::findOrFail($id);
+        $this->authorize('list-teacher-reports', $teacher);
+
+        return new ReportCollection($teacher->reports);
     }
 
     /**
@@ -101,6 +115,9 @@ class TeacherController extends Controller
      */
     public function assignedReports($id)
     {
-        return new ReportCollection(Teacher::findOrFail($id)->assignedReports);
+        $teacher = Teacher::findOrFail($id);
+        $this->authorize('list-teacher-assigned-reports', $teacher);
+
+        return new ReportCollection($teacher->assignedReports);
     }
 }

@@ -24,9 +24,12 @@ class StudentController extends Controller
      */
     public function index()
     {
+        $organization = currentOrganization();
+        $this->authorize('list-students', $organization);
+
         // TODO: Add an endpoint for getting user names and ids only that
         //       is accessible by everyone in the organization!
-        return new StudentCollection(currentOrganization()->students);
+        return new StudentCollection($organization->students);
     }
 
     /**
@@ -49,7 +52,10 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        return new StudentResource(Student::findOrFail($id));
+        $student = Student::findOrFail($id);
+        $this->authorize('show-student', $student);
+
+        return new StudentResource($student);
     }
 
     /**
@@ -69,7 +75,10 @@ class StudentController extends Controller
             'phone'         => 'string|min:1|max:127',
         ]);
 
-        Student::findOrFail($id)->update( $request->except(['password']) );
+        $student = Student::findOrFail($id);
+        $this->authorize('update-student', $student);
+
+        $student->update( $request->except(['password']) );
     }
 
     /**
@@ -80,8 +89,11 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
+        $student = Student::findOrFail($id);
+        $this->authorize('delete-student', $student);
+
         // NOTE: All reports and other data belonging to the user will remain.
-        Student::findOrFail($id)->delete();
+        $student->delete();
     }
 
     /**
@@ -91,13 +103,14 @@ class StudentController extends Controller
      */
     public function reports($id)
     {
-        // TODO: Use guards/policies!
+        $student = Student::findOrFail($id);
+        $this->authorize('list-student-reports', $student);
 
         // only the student themself or a teacher can view
-        if (Auth::user()->isStudent() && Auth::user()->id != $id)
-            return response()->json("Unauthorized.", 401);
+        // if (Auth::user()->isStudent() && Auth::user()->id != $id)
+        //     return response()->json("Unauthorized.", 401);
 
-        return new ReportCollection(Student::findOrFail($id)->reports);
+        return new ReportCollection($student->reports);
     }
 
     /**
@@ -108,6 +121,7 @@ class StudentController extends Controller
     public function involvedReports($id)
     {
         $student = Student::findOrFail($id);
+        $this->authorize('list-student-involved-reports', $student);
 
         return collect([
             'bullied'   => new ReportCollection($student->bulliedReports),

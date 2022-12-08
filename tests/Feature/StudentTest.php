@@ -51,7 +51,7 @@ class StudentTest extends TestCase
         $student = Student::factory()->forOrganization($organization->id)->create();
 
         $response = $this->getJson($this->api("students/$student->id"));
-        $response->assertUnauthorized();
+        $response->assertForbidden();
     }
 
     public function test_can_update()
