@@ -138,7 +138,7 @@ class Report extends Model
      */
     public function case()
     {
-        return $this->belongsTo(ReportCase::class);
+        return $this->belongsTo(ReportCase::class, 'report_case_id');
     }
 
     /**
@@ -153,6 +153,7 @@ class Report extends Model
     public function reporter()
     {
         // FIXME: Obviously we should not do this :()
+        //        This fails if reporter_id does not exist...
         $role = \DB::table('users')->where('id', $this->reporter_id)->first('role');
         return !empty($role)
             ? $this->belongsTo(\App\Role::getRoleModel($role->role))

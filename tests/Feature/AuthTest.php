@@ -14,6 +14,7 @@ use Tests\TestCase;
 
 use App\Models\Organization;
 use App\Models\Student;
+use App\Models\Teacher;
 
 class AuthTest extends TestCase
 {
@@ -23,7 +24,7 @@ class AuthTest extends TestCase
     {
         $user = Student::factory()->create();
 
-        $response = $this->postJson($this->api('login'), [
+        $response = $this->postJson($this->api("login"), [
             'email'         => $user->email,
             'password'      => 'password',
             'device_name'   => 'Ellin Oneplus 8',
@@ -35,7 +36,7 @@ class AuthTest extends TestCase
     {
         $this->actingAsStudent();
 
-        $response = $this->postJson($this->api('logout'));
+        $response = $this->postJson($this->api("logout"));
         $response->assertOk();
     }
 
@@ -45,13 +46,26 @@ class AuthTest extends TestCase
 
         // make sure all relevant fields are found
         // and that password is not visible
-        $response = $this->getJson($this->api('profile'));
+        $response = $this->getJson($this->api("profile"));
         $response->assertOk()->assertJson([
             'id'            => $student->id,
             'first_name'    => $student->first_name,
             'last_name'     => $student->last_name,
             'email'         => $student->email,
             'role'          => 'student',
+        ])->assertJsonMissingPath('password');
+
+        $teacher = $this->actingAsTeacher();
+
+        // make sure all relevant fields are found
+        // and that password is not visible
+        $response = $this->getJson($this->api("profile"));
+        $response->assertOk()->assertJson([
+            'id'            => $teacher->id,
+            'first_name'    => $teacher->first_name,
+            'last_name'     => $teacher->last_name,
+            'email'         => $teacher->email,
+            'role'          => 'teacher',
         ])->assertJsonMissingPath('password');
     }
 
@@ -60,7 +74,7 @@ class AuthTest extends TestCase
         $organization = Organization::factory()->create();
         $student = $this->actingAsStudent($organization->id);
 
-        $response = $this->getJson($this->api('profile/organization'));
+        $response = $this->getJson($this->api("profile/organization"));
         $response->assertOk()->assertJson([
             'id'                => $organization->id,
             'name'              => $organization->name,
@@ -72,7 +86,7 @@ class AuthTest extends TestCase
 
     public function test_cannot_access_protected_routes_without_logging_in()
     {
-        $response = $this->getJson($this->api('profile'));
+        $response = $this->getJson($this->api("profile"));
         $response->assertUnauthorized();
     }
 }
