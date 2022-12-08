@@ -14,10 +14,10 @@ use Tests\TestCase;
 
 use App\Models\Organization;
 use App\Models\ReportCase;
-use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Report;
 
-class StudentTest extends TestCase
+class TeacherTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -25,9 +25,9 @@ class StudentTest extends TestCase
     {
         $organization = Organization::factory()->create();
         $teacher = $this->actingAsTeacher($organization->id);
-        Student::factory()->forOrganization($organization->id)->count(5)->create();
+        Teacher::factory()->forOrganization($organization->id)->count(4)->create();
 
-        $response = $this->getJson($this->api("students"));
+        $response = $this->getJson($this->api("teachers"));
         $response->assertOk()->assertJsonCount(5);
     }
 
@@ -35,12 +35,11 @@ class StudentTest extends TestCase
     {
         $organization = Organization::factory()->create();
         $teacher = $this->actingAsTeacher($organization->id);
-        $student = Student::factory()->forOrganization($organization->id)->create();
 
-        $response = $this->getJson($this->api("students/$student->id"));
+        $response = $this->getJson($this->api("teachers/$teacher->id"));
         $response->assertOk()->assertJson([
-            'id' => $student->id,
-            'email' => $student->email,
+            'id' => $teacher->id,
+            'email' => $teacher->email,
         ]);
     }
 
@@ -48,76 +47,72 @@ class StudentTest extends TestCase
     {
         $organization = Organization::factory()->create();
         $this->actingAsStudent($organization->id);
-        $student = Student::factory()->forOrganization($organization->id)->create();
+        $teacher = Teacher::factory()->forOrganization($organization->id)->create();
 
-        $response = $this->getJson($this->api("students/$student->id"));
+        $response = $this->getJson($this->api("teachers/$teacher->id"));
         $response->assertUnauthorized();
     }
 
     public function test_can_update()
     {
-        $student = $this->actingAsStudent();
+        $teacher = $this->actingAsTeacher();
 
-        $response = $this->patchJson($this->api("students/$student->id"), [
+        $response = $this->patchJson($this->api("teachers/$teacher->id"), [
             'first_name' => 'Miika'
         ]);
         
         $this->assertDatabaseHas('users', [
-            'id' => $student->id,
+            'id' => $teacher->id,
             'first_name' => 'Miika'
         ]);
     }
 
     public function test_self_can_delete()
     {
-        $student = $this->actingAsStudent();
-        $response = $this->deleteJson($this->api("students/$student->id"));
+        $teacher = $this->actingAsTeacher();
+        $response = $this->deleteJson($this->api("teachers/$teacher->id"));
         $this->assertDatabaseMissing('users', [
-            'id' => $student->id
+            'id' => $teacher->id
         ]);
     }
 
-    public function test_other_students_cannot_delete()
+    public function test_other_teachers_cannot_delete()
     {
         $organization = Organization::factory()->create();
-        $student = Student::factory()->forOrganization($organization->id)->create();
-        $this->actingAsStudent($organization->id);  // act as other student
+        $teacher = Teacher::factory()->forOrganization($organization->id)->create();
+        $this->actingAsTeacher($organization->id);  // act as other teacher
 
-        $response = $this->deleteJson($this->api("students/$student->id"));
+        $response = $this->deleteJson($this->api("teachers/$teacher->id"));
         $this->assertDatabaseHas('users', [
-            'id' => $student->id
+            'id' => $teacher->id
         ]);
     }
 
     public function test_self_can_list_reports()
     {
         $organization = Organization::factory()->create();
-        $student = $this->actingAsStudent();
+        $teacher = $this->actingAsTeacher();
         $reports = Report::factory()
             ->for(ReportCase::factory()->for($organization), 'case')
-            ->state(['reporter_id' => $student->id])
+            ->state(['reporter_id' => $teacher->id])
             ->count(3)->create();
 
-        $response = $this->getJson($this->api("students/$student->id/reports"));
+        $response = $this->getJson($this->api("teachers/$teacher->id/reports"));
         $response->assertOk()->assertJsonCount(3);
     }
 
-    public function test_self_can_list_involved_reports()
+    public function test_self_can_list_assigned_reports()
     {
         $organization = Organization::factory()->create();
-        $reporterStudent = Student::factory()->create();
-        $student = $this->actingAsStudent();
+        $reporterTeacher = Teacher::factory()->create();
+        $teacher = $this->actingAsTeacher();
         $reports = Report::factory()
             ->for(ReportCase::factory()->for($organization), 'case')
-            ->for($student, 'bully')
-            ->state(['reporter_id' => $reporterStudent->id])
+            ->for($teacher, 'handler')
+            ->state(['reporter_id' => $reporterTeacher->id])
             ->count(3)->create();
 
-        // make sure that the response has no 'bullied' type reports
-        // but has 3 'bully' type reports
-        $response = $this->getJson($this->api("students/$student->id/involved-reports"));
-        $response->assertOk()
-            ->assertJsonPath('bullied', [])
-            ->assertJsonCount(3, 'bully');
+        $response = $this->getJson($this->api("teachers/$teacher->id/assigned-reports"));
+        $response->assertOk()->assertJsonCount(3);
     }
 }
