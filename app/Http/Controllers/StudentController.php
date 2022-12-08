@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StudentCollection;
+use App\Http\Resources\StudentResource;
 use App\Http\Resources\ReportCollection;
 use Illuminate\Http\Request;
 use App\Models\Student;
@@ -22,7 +24,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        return currentOrganization()->students;
+        // TODO: Add an endpoint for getting user names and ids only that
+        //       is accessible by everyone in the organization!
+        return new StudentCollection(currentOrganization()->students);
     }
 
     /**
@@ -45,7 +49,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        return Student::findOrFail($id);
+        return new StudentResource(Student::findOrFail($id));
     }
 
     /**

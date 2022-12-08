@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TeacherCollection;
+use App\Http\Resources\TeacherResource;
 use App\Http\Resources\ReportCollection;
 use Illuminate\Http\Request;
 use App\Models\Teacher;
@@ -21,7 +23,9 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return currentOrganization()->teachers;
+        // TODO: Add an endpoint for getting user names and ids only that
+        //       is accessible by everyone in the organization!
+        return new TeacherCollection(currentOrganization()->teachers);
     }
 
     /**
@@ -44,7 +48,7 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        return Teacher::findOrFail($id);
+        return new TeacherResource(Teacher::findOrFail($id));
     }
 
     /**
