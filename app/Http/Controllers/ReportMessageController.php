@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReportMessageResource;
 use Illuminate\Http\Request;
 use App\Models\ReportMessage;
 use App\Models\Report;
@@ -44,7 +45,7 @@ class ReportMessageController extends Controller
      */
     public function show($id)
     {
-        return ReportMessage::findOrFail($id);
+        return new ReportMessageResource(ReportMessage::findOrFail($id));
     }
 
     /**
