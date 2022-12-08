@@ -48,4 +48,17 @@ abstract class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the model should belong to given organziation.
+     *
+     * @param int $organizationId
+     * @return static
+     */
+    public function forOrganization(int $organizationId = null)
+    {
+        return $this->state(fn (array $attributes) => [
+            'organization_id' => $organizationId,
+        ]);
+    }
 }

@@ -23,10 +23,10 @@ class OrganizationFactory extends Factory
     public function definition()
     {
         return [
-            'name'              => faker()->company(),
-            'street_address'    => faker()->streetAddress(),
-            'city'              => faker()->city(),
-            'zip'               => faker()->postcode(),
+            'name'              => fake()->company(),
+            'street_address'    => fake()->streetAddress(),
+            'city'              => fake()->city(),
+            'zip'               => fake()->postcode(),
         ];
     }
 }
