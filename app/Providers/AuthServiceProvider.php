@@ -44,12 +44,12 @@ class AuthServiceProvider extends ServiceProvider
 
         // Only self can access their profile
         Gate::define('view-profile', function (User $user, User $profile) {
-            return $user->id === $profile->id;
+            return $user->id == $profile->id;
         });
 
         // A member of organization can show organization
         Gate::define('view-organization', function (User $user, Organization $organization) {
-            return $user->organization_id === $organziation->id;
+            return $user->organization_id == $organziation->id;
         });
 
         ////////////////////////////////////////////////////////////////////////
@@ -125,6 +125,35 @@ class AuthServiceProvider extends ServiceProvider
         // Only self can list teacher's assigned reports
         Gate::define('list-teacher-assigned-reports', function (User $user, Teacher $teacher) {
             return $user->id == $teacher->id;
+        });
+
+        ////////////////////////////////////////////////////////////////////////
+        // Organization Gates
+        ////////////////////////////////////////////////////////////////////////
+
+        // Nobody at the moment can list organizations (TODO)
+        Gate::define('list-organizations' function (User $user) {
+            return false;
+        });
+
+        // Nobody at the moment can create organizations (TODO)
+        Gate::define('create-organizations' function (User $user) {
+            return false;
+        });
+
+        // Only members of an organization can view it.
+        Gate::define('view-organization', function (User $user, $organization) {
+            return $user->organization_id == $organization->id;
+        });
+
+        // Only administrators of the organization can update it.
+        Gate::define('update-organization', function (User $user, $organization) {
+            return $user->isAdministrator() && $user->organization_id == $organization->id;
+        });
+
+        // Nobody at the moment can delete organizations (TODO)
+        Gate::define('delete-organization', function (User $user, $organization) {
+            return false;
         });
     }
 }

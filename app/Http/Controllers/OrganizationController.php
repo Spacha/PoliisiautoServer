@@ -22,6 +22,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
+        $this->authorize('list-organizations');
         return new OrganizationCollection(Organization::all());
     }
 
@@ -33,6 +34,8 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create-organizations');
+
         $request->validate([
             'name'              => 'required|string|between:3,255|unique:organizations,name',
             'street_address'    => 'required|string|between:3,255',
@@ -53,7 +56,10 @@ class OrganizationController extends Controller
      */
     public function show($id)
     {
-        return new OrganizationResource(Organization::findOrFail($id));
+        $organization = Organization::findOrFail($id);
+        $this->authorize('view-organization', $organization);
+
+        return new OrganizationResource($organization);
     }
 
     /**
@@ -65,6 +71,9 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $organization = Organization::findOrFail($id);
+        $this->authorize('update-organization', $organization);
+
         $request->validate([
             'name'              => 'string|between:3,255|unique:organizations,name,' . $id,
             'street_address'    => 'string|between:3,255',
@@ -72,7 +81,7 @@ class OrganizationController extends Controller
             'zip'               => 'numeric',
         ]);
 
-        Organization::findOrFail($id)->update( $request->all() );
+        $organization->update( $request->all() );
     }
 
     /**
@@ -83,8 +92,11 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
+        $organization = Organization::findOrFail($id);
+        $this->authorize('delete-organization', $organization);
+
         // NOTE: All users, reports and other data
         // in the organization will remain.
-        Organization::findOrFail($id)->delete();
+        $organization->delete();
     }
 }

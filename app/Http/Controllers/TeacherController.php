@@ -25,6 +25,7 @@ class TeacherController extends Controller
     {
         $organization = currentOrganization();
         $this->authorize('list-teachers', $organization);
+
         // TODO: Add an endpoint for getting user names and ids only that
         //       is accessible by everyone in the organization!
         return new TeacherCollection($organization->teachers);
@@ -65,6 +66,9 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $teacher = Teacher::findOrFail($id);
+        $this->authorize('update-teacher', $teacher);
+
         $request->validate([
             'first_name'    => 'string|min:1|max:127',
             'last_name'     => 'string|min:1|max:127',
@@ -72,9 +76,6 @@ class TeacherController extends Controller
             //'password'      => 'string|confirmed|min:8|max:127',
             'phone'         => 'string|min:1|max:127',
         ]);
-
-        $teacher = Teacher::findOrFail($id);
-        $this->authorize('update-teacher', $teacher);
 
         $teacher->update( $request->except(['password']) );
     }

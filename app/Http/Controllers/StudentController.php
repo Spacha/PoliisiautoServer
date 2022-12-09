@@ -67,6 +67,9 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $student = Student::findOrFail($id);
+        $this->authorize('update-student', $student);
+
         $request->validate([
             'first_name'    => 'string|min:1|max:127',
             'last_name'     => 'string|min:1|max:127',
@@ -74,9 +77,6 @@ class StudentController extends Controller
             //'password'      => 'string|confirmed|min:8|max:127',
             'phone'         => 'string|min:1|max:127',
         ]);
-
-        $student = Student::findOrFail($id);
-        $this->authorize('update-student', $student);
 
         $student->update( $request->except(['password']) );
     }
