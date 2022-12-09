@@ -8,13 +8,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Traits\HasRole;
+// use Illuminate\Database\Eloquent\Factories\HasFactory;
+// use App\Models\Traits\HasRole;
 use App\Role;
 
-class Administrator extends User
+class Administrator extends Teacher
 {
-    use HasFactory, HasRole;
+    //use HasFactory, HasRole;
 
     /**
      * User role ID.
@@ -31,11 +31,4 @@ class Administrator extends User
     protected $attributes = [
         'role' => self::ROLE,
     ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
 }
