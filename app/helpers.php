@@ -73,7 +73,7 @@ function makeObj(array $data) : object
 }
 
 /**
- * Takes in a path separated by forward slashes and returs the last part (file name).
+ * Takes in a path separated by forward slashes and returns the last part (file name).
  */
 function fileNameFromPath1($path)
 {

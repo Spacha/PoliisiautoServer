@@ -18,7 +18,7 @@ use UnexpectedValueException;
 
 class Role
 {
-    const ROLE_LIMITS = [0, 3];
+    const ROLE_LIMITS = [1, 3];
 
     const STUDENT       = 1;
     const TEACHER       = 2;
