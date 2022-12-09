@@ -26,13 +26,10 @@ class ReportController extends Controller
      */
     public function index()
     {
-        // TODO: Use guards/policies!
+        $organization = currentOrganization();
+        $this->authorize('view-reports', $organization);
 
-        // only teachers can view
-        if (!Auth::user()->isTeacher())
-            return response()->json("Unauthorized.", 401);
-
-        return new ReportCollection(currentOrganization()->reports);
+        return new ReportCollection($organization->reports);
     }
 
     /**
@@ -44,6 +41,9 @@ class ReportController extends Controller
      */
     public function store(Request $request, $caseId)
     {
+        $case = ReportCase::findOrFail($caseId);
+        $this->authorize('create-report', $case);
+
         $request->validate([
             'description'   => 'string|between:0,2048',
             'bully_id'      => 'nullable|numeric|exists:users,id',
@@ -53,10 +53,12 @@ class ReportController extends Controller
             //'type'          => '',
         ]);
 
+        // TODO: Validate that the handler belongs to the user's organization
+
         $report = new Report( $request->all() );
         $report->reporter_id = Auth::user()->id;
 
-        ReportCase::findOrFail($caseId)->reports()->save($report);
+        $case->reports()->save($report);
 
         return response(null, 201);
     }
@@ -69,7 +71,10 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        return new ReportResource(Report::findOrFail($id));
+        $report = Report::findOrFail($id);
+        $this->authorize('show-report', $report);
+
+        return new ReportResource($report);
     }
 
     /**
@@ -81,6 +86,9 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $report = Report::findOrFail($id);
+        $this->authorize('update-report', $report);
+
         $request->validate([
             'description'   => 'string|between:0,2048',
             'bully_id'      => 'nullable|numeric|exists:users,id',
@@ -90,7 +98,7 @@ class ReportController extends Controller
             //'type'          => '',
         ]);
 
-        Report::findOrFail($id)->update( $request->all() );
+        $report->update( $request->all() );
     }
 
     /**
@@ -101,8 +109,11 @@ class ReportController extends Controller
      */
     public function destroy($id)
     {
+        $report = Report::findOrFail($id);
+        $this->authorize('delete-report', $report);
+
         // NOTE: All report messages and other data in the report will remain.
-        Report::findOrFail($id)->delete();
+        $report->delete();
     }
 
     /**
@@ -145,7 +156,6 @@ class ReportController extends Controller
      */
     public function storeToNewCase(Request $request)
     {
-        \Log::debug($request->all());
         // store a new, empty case under the user's organization
         $case = currentOrganization()->cases()->save(
             new ReportCase()

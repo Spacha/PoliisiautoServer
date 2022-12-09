@@ -13,6 +13,8 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 use App\Models\{
     Organization,
+    ReportCase,
+    Report,
     Student,
     Teacher,
     User,
@@ -154,6 +156,31 @@ class AuthServiceProvider extends ServiceProvider
         // Nobody at the moment can delete organizations (TODO)
         Gate::define('delete-organization', function (User $user, $organization) {
             return false;
+        });
+
+        ////////////////////////////////////////////////////////////////////////
+        // Report Gates
+        ////////////////////////////////////////////////////////////////////////
+
+        // Only teachers of the organization can view its reports.
+        Gate::define('view-reports', function (User $user, Organization $organization) {
+            return $user->isTeacher() && $user->organization_id == $organization->id;
+        });
+
+        // Only members of the organization owning the case can store reports to it.
+        Gate::define('create-report', function (User $user, ReportCase $case) {
+            return $user->organization_id == $case->organization_id;
+        });
+
+        // Only teachers of the organization AND the reporter can view the report.
+        Gate::define('show-report', function (User $user, Report $report) {
+            return ($user->id == $report->reporter_id) ||
+                   ($user->isTeacher() && $user->organization_id == $report->organization_id);
+        });
+
+        // Only the reporter can delete a report
+        Gate::define('delete-report', function (User $user, Report $report) {
+            return $user->id == $report->reporter_id;
         });
     }
 }
