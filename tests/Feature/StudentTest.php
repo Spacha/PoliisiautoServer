@@ -61,7 +61,8 @@ class StudentTest extends TestCase
         $response = $this->patchJson($this->api("students/$student->id"), [
             'first_name' => 'Miika'
         ]);
-        
+
+        $response->assertOk();
         $this->assertDatabaseHas('users', [
             'id' => $student->id,
             'first_name' => 'Miika'
@@ -72,6 +73,7 @@ class StudentTest extends TestCase
     {
         $student = $this->actingAsStudent();
         $response = $this->deleteJson($this->api("students/$student->id"));
+        $response->assertOk();
         $this->assertDatabaseMissing('users', [
             'id' => $student->id
         ]);
@@ -84,6 +86,7 @@ class StudentTest extends TestCase
         $this->actingAsStudent($organization->id);  // act as other student
 
         $response = $this->deleteJson($this->api("students/$student->id"));
+        $response->assertForbidden();
         $this->assertDatabaseHas('users', [
             'id' => $student->id
         ]);

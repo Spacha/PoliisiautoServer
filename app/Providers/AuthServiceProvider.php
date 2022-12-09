@@ -132,12 +132,12 @@ class AuthServiceProvider extends ServiceProvider
         ////////////////////////////////////////////////////////////////////////
 
         // Nobody at the moment can list organizations (TODO)
-        Gate::define('list-organizations' function (User $user) {
+        Gate::define('list-organizations', function (User $user) {
             return false;
         });
 
         // Nobody at the moment can create organizations (TODO)
-        Gate::define('create-organizations' function (User $user) {
+        Gate::define('create-organizations', function (User $user) {
             return false;
         });
 

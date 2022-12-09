@@ -64,6 +64,7 @@ class TeacherTest extends TestCase
             'first_name' => 'Miika'
         ]);
         
+        $response->assertOk();
         $this->assertDatabaseHas('users', [
             'id' => $teacher->id,
             'first_name' => 'Miika'
@@ -74,6 +75,7 @@ class TeacherTest extends TestCase
     {
         $teacher = $this->actingAsTeacher();
         $response = $this->deleteJson($this->api("teachers/$teacher->id"));
+        $response->assertOk();
         $this->assertDatabaseMissing('users', [
             'id' => $teacher->id
         ]);
@@ -86,6 +88,7 @@ class TeacherTest extends TestCase
         $this->actingAsTeacher($organization->id);  // act as other teacher
 
         $response = $this->deleteJson($this->api("teachers/$teacher->id"));
+        $response->assertForbidden();
         $this->assertDatabaseHas('users', [
             'id' => $teacher->id
         ]);
