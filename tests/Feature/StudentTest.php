@@ -97,8 +97,8 @@ class StudentTest extends TestCase
         $organization = Organization::factory()->create();
         $student = $this->actingAsStudent();
         $reports = Report::factory()
+            ->forReporter($student)
             ->for(ReportCase::factory()->for($organization), 'case')
-            ->state(['reporter_id' => $student->id])
             ->count(3)->create();
 
         $response = $this->getJson($this->api("students/$student->id/reports"));
@@ -111,9 +111,9 @@ class StudentTest extends TestCase
         $reporterStudent = Student::factory()->create();
         $student = $this->actingAsStudent();
         $reports = Report::factory()
+            ->forReporter($reporterStudent)
             ->for(ReportCase::factory()->for($organization), 'case')
             ->for($student, 'bully')
-            ->state(['reporter_id' => $reporterStudent->id])
             ->count(3)->create();
 
         // make sure that the response has no 'bullied' type reports

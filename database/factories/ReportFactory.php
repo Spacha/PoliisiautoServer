@@ -11,6 +11,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+use App\Models\User;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Report>
  */
@@ -38,6 +40,19 @@ class ReportFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'is_anonymous' => 1,
+        ]);
+    }
+
+    /**
+     * Indicate that the report should belong to given reporter.
+     * This is a workaround since 'reporter' relationship doesn't wor 100 %.
+     *
+     * @return static
+     */
+    public function forReporter(User $reporter)
+    {
+        return $this->state(fn (array $attributes) => [
+            'reporter_id' => $reporter->id,
         ]);
     }
 }

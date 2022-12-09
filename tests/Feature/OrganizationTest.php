@@ -23,7 +23,7 @@ class OrganizationTest extends TestCase
     // NOTE: When someone can list, update this to test that functionality.
     public function test_nobody_can_list()
     {
-        $organization = Organization::factory()->count(3)->create();
+        Organization::factory()->count(3)->create();
 
         // try as a student
         $this->actingAsStudent();

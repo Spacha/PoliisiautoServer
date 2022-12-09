@@ -99,8 +99,8 @@ class TeacherTest extends TestCase
         $organization = Organization::factory()->create();
         $teacher = $this->actingAsTeacher();
         $reports = Report::factory()
+            ->forReporter($teacher)
             ->for(ReportCase::factory()->for($organization), 'case')
-            ->state(['reporter_id' => $teacher->id])
             ->count(3)->create();
 
         $response = $this->getJson($this->api("teachers/$teacher->id/reports"));
@@ -113,9 +113,9 @@ class TeacherTest extends TestCase
         $reporterTeacher = Teacher::factory()->create();
         $teacher = $this->actingAsTeacher();
         $reports = Report::factory()
+            ->forReporter($reporterTeacher)
             ->for(ReportCase::factory()->for($organization), 'case')
             ->for($teacher, 'handler')
-            ->state(['reporter_id' => $reporterTeacher->id])
             ->count(3)->create();
 
         $response = $this->getJson($this->api("teachers/$teacher->id/assigned-reports"));
