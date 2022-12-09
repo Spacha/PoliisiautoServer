@@ -22,7 +22,10 @@ class ReportCaseController extends Controller
      */
     public function index()
     {
-        return currentOrganization()->cases;
+        $organization = currentOrganization();
+        $this->authorize('list-report-cases', $organization);
+
+        return $organization->cases;
     }
 
     /**
@@ -33,6 +36,9 @@ class ReportCaseController extends Controller
      */
     public function store(Request $request)
     {
+        $organization = currentOrganization();
+        $this->authorize('create-report-case', $organization);
+
         $request->validate([
             'name' => 'string|between:1,255'
         ]);
@@ -53,10 +59,10 @@ class ReportCaseController extends Controller
      */
     public function show($id)
     {
-        return ReportCase::findOrFail($id);
-        // students can only show their own cases
-        //if (Auth::user()->isStudent() && $case->reporter != Auth::user()->id)
-        //    throw new AuthenticationException();
+        $case = ReportCase::findOrFail($id)
+        $this->authorize('show-report-case', $case);
+
+        return $case;
     }
 
     /**
@@ -68,11 +74,14 @@ class ReportCaseController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $case = ReportCase::findOrFail($id)
+        $this->authorize('update-report-case', $case);
+
         $request->validate([
             'name' => 'string|between:1,255'
         ]);
 
-        ReportCase::findOrFail($id)->update( $request->all() );
+        $case->update( $request->all() );
     }
 
     /**
@@ -83,8 +92,11 @@ class ReportCaseController extends Controller
      */
     public function destroy($id)
     {
+        $case = ReportCase::findOrFail($id)
+        $this->authorize('delete-report-case', $case);
+
         // NOTE: All reports and other data in the case will remain.
-        ReportCase::findOrFail($id)->delete();
+        $case->delete();
     }
 
     /**

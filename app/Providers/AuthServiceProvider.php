@@ -160,6 +160,20 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         ////////////////////////////////////////////////////////////////////////
+        // Report Case Gates
+        ////////////////////////////////////////////////////////////////////////
+
+        // Only teachers of the organization can view its cases.
+        Gate::define('list-report-cases', function (User $user, Organization $organization) {
+            return $user->isTeacher() && $user->organization_id == $organization->id;
+        });
+
+        // Only members of the organization can store cases to it.
+        Gate::define('create-report-case', function (User $user, Organization $organization) {
+            return $user->organization_id == $case->organization_id;
+        });
+
+        ////////////////////////////////////////////////////////////////////////
         // Report Gates
         ////////////////////////////////////////////////////////////////////////
 
@@ -174,31 +188,25 @@ class AuthServiceProvider extends ServiceProvider
             return $user->organization_id == $case->organization_id;
         });
 
+        // Only teachers of the organization can view a case
+        Gate::define('show-report-case', function (User $user, ReportCase $case) {
+            return $user->isTeacher() && $user->organization_id == $case->organization_id;
+        });
+
+        // Only teachers of the organization can update a case
+        Gate::define('update-report-case', function (User $user, ReportCase $case) {
+            return $user->isTeacher() && $user->organization_id == $case->organization_id;
+        });
+
         // Only teachers of the organization AND the reporter can view the report.
         Gate::define('show-report', function (User $user, Report $report) {
             return ($user->id == $report->reporter_id) ||
                    ($user->isTeacher() && $user->organization_id == $report->organization_id);
         });
 
-        // Only the reporter can delete a report
-        Gate::define('delete-report', function (User $user, Report $report) {
-            return $user->id == $report->reporter_id;
-        });
-
-        // Only teachers of the organization AND the reporter can view the report's messages.
-        Gate::define('list-report-messages', function (User $user, Report $report) {
-            return ($user->id == $report->reporter_id) ||
-                   ($user->isTeacher() && $user->organization_id == $report->organization_id);
-        });
-
-        // Only teachers of the organization can update the report's case.
-        Gate::define('update-report-case', function (User $user, Report $report) {
-            return $user->isTeacher() && $user->organization_id == $report->organization_id;
-        });
-
-        // Only members of the organization can store reports to it.
-        Gate::define('create-report-and-case', function (User $user, Organization $organization) {
-            return $user->organization_id == $organization->id;
+        // Only teachers of the organization can delete a case
+        Gate::define('delete-report-case', function (User $user, ReportCase $case) {
+            return $user->isTeacher() && $user->organization_id == $case->organization_id;
         });
 
         ////////////////////////////////////////////////////////////////////////
@@ -226,8 +234,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('delete-report-message', function (User $user, ReportMessage $message) {
             return $user->id == $message->author_id;
         });
-
-
 
         // // Only teachers of the organization AND the reporter can view the report.
         // Gate::define('show-report', function (User $user, Report $report) {
