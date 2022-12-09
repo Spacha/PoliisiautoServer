@@ -123,7 +123,10 @@ class ReportController extends Controller
      */
     public function messages($id)
     {
-        return new ReportMessageCollection(Report::findOrFail($id)->messages);
+        $report = Report::findOrFail($id);
+        $this->authorize('list-report-messages', $report);
+
+        return new ReportMessageCollection($report->messages);
     }
 
     /**
@@ -135,13 +138,16 @@ class ReportController extends Controller
      */
     public function updateCase(Request $request, $id)
     {
+        $report = Report::findOrFail($id);
+        $this->authorize('update-report-case', $report);
+
         $request->validate([
             'report_case_id' => 'numeric|exists:report_cases,id',
         ]);
 
         // associate the report with the new case
         $case = ReportCase::findOrFail($request->case_id);
-        $case->reports()->save( Report::findOrFail($id) );
+        $case->reports()->save($report);
 
         // if the old case was unnamed and now empty, remove it, as it is completely unnecessary
         if (empty($case->name) && $case->reports->count() == 0)
@@ -156,8 +162,11 @@ class ReportController extends Controller
      */
     public function storeToNewCase(Request $request)
     {
+        $organization = currentOrganization();
+        $this->authorize('create-report-and-case', $organization);
+
         // store a new, empty case under the user's organization
-        $case = currentOrganization()->cases()->save(
+        $case = $organization->cases()->save(
             new ReportCase()
         );
 

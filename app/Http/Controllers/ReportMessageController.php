@@ -24,6 +24,9 @@ class ReportMessageController extends Controller
      */
     public function store(Request $request, $reportId)
     {
+        $report = Report::findOrFail($reportId);
+        $this->authorize('create-report-message', $report);
+
         $request->validate([
             'content'       => 'string|between:0,4095',
             'is_anonymous'  => 'required|boolean',
@@ -32,7 +35,7 @@ class ReportMessageController extends Controller
         $message = new ReportMessage( $request->all() );
         $message->author_id = Auth::user()->id;
 
-        Report::findOrFail($reportId)->messages()->save($message);
+        $report->messages()->save($message);
 
         return response(null, 201);
     }
@@ -45,7 +48,10 @@ class ReportMessageController extends Controller
      */
     public function show($id)
     {
-        return new ReportMessageResource(ReportMessage::findOrFail($id));
+        $reportMessage = ReportMessage::findOrFail($id);
+        $this->authorize('show-report-message', $reportMessage);
+
+        return new ReportMessageResource($reportMessage);
     }
 
     /**
@@ -57,12 +63,15 @@ class ReportMessageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $reportMessage = ReportMessage::findOrFail($id);
+        $this->authorize('update-report-message', $reportMessage);
+
         $request->validate([
             'content'       => 'string|between:0,4095',
             'is_anonymous'  => 'required|boolean',
         ]);
 
-        ReportMessage::findOrFail($id)->update( $request->all() );
+        $reportMessage->update( $request->all() );
     }
 
     /**
@@ -73,6 +82,9 @@ class ReportMessageController extends Controller
      */
     public function destroy($id)
     {
-        ReportMessage::findOrFail($id)->delete();
+        $reportMessage = ReportMessage::findOrFail($id);
+        $this->authorize('delete-report-message', $reportMessage);
+
+        $reportMessage->delete();
     }
 }
