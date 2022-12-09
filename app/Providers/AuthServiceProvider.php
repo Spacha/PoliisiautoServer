@@ -209,6 +209,11 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isTeacher() && $user->organization_id == $case->organization_id;
         });
 
+        // Only members of the organization can store reports and cases to it.
+        Gate::define('create-report-and-case', function (User $user, Organization $organization) {
+            return $user->organization_id == $organization->id;
+        });
+
         ////////////////////////////////////////////////////////////////////////
         // Report Message Gates
         ////////////////////////////////////////////////////////////////////////

@@ -105,10 +105,10 @@ Route::prefix('v1')->group(function () use ($ctrl) {
         Route::get('teachers/{id}/assigned-reports',    [$ctrl['Teacher'], 'assignedReports']);     //< list all reports assigned to the teacher; accessible by: teachers
 
         // Administrator
-        Route::get('administrators',                    [$ctrl['Administrator'], 'index']);         //< list all administrators in the organization; accessible by: administrators
-        Route::post('administrators',                   [$ctrl['Administrator'], 'store']);         //< store a new administrator; accessible by: administrators
-        Route::get('administrators/{id}',               [$ctrl['Administrator'], 'show']);          //< show an administrator; accessible by: administrators
-        Route::patch('administrators/{id}',             [$ctrl['Administrator'], 'update']);        //< update an administrator; accessible by: administrators
-        Route::delete('administrators/{id}',            [$ctrl['Administrator'], 'destroy']);       //< delete an administrator; accessible by: administrators
+        // Route::get('administrators',                    [$ctrl['Administrator'], 'index']);         //< list all administrators in the organization; accessible by: administrators
+        // Route::post('administrators',                   [$ctrl['Administrator'], 'store']);         //< store a new administrator; accessible by: administrators
+        // Route::get('administrators/{id}',               [$ctrl['Administrator'], 'show']);          //< show an administrator; accessible by: administrators
+        // Route::patch('administrators/{id}',             [$ctrl['Administrator'], 'update']);        //< update an administrator; accessible by: administrators
+        // Route::delete('administrators/{id}',            [$ctrl['Administrator'], 'destroy']);       //< delete an administrator; accessible by: administrators
     });
 });

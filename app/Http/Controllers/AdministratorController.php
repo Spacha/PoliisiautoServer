@@ -13,6 +13,11 @@ use App\Models\Administrator;
 
 class AdministratorController extends Controller
 {
+    // TODO: Remove this when implementation is done.
+    public function __construct() {
+        throw \Exception("Administrator controller is not finished! At least authorization for each endpoint is required!");
+    }
+
     /**
      * List all administrators in the user's organization.
      *
