@@ -107,6 +107,9 @@ class ReportCaseController extends Controller
      */
     public function reports($id)
     {
+        $case = ReportCase::findOrFail($id)
+        $this->authorize('list-reports-in-case', $case);
+
         return ReportCase::findOrFail($id)->reports;
     }
 }

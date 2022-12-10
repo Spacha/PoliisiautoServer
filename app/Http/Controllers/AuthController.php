@@ -96,7 +96,10 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profile() {
-        return new ProfileResource(Auth::user());
+        $user = Auth::user();
+        $this->authorize('show-profile', $user);
+
+        return new ProfileResource($user);
     }
 
     /**
@@ -105,6 +108,9 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function organization() {
-        return new OrganizationResource(Auth::user()->organization);
+        $organization = Auth::user()->organization;
+        $this->authorize('show-profile-organization', $organization);
+
+        return new OrganizationResource($organization);
     }
 }

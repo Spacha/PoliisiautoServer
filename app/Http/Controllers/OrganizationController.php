@@ -57,7 +57,7 @@ class OrganizationController extends Controller
     public function show($id)
     {
         $organization = Organization::findOrFail($id);
-        $this->authorize('view-organization', $organization);
+        $this->authorize('show-organization', $organization);
 
         return new OrganizationResource($organization);
     }

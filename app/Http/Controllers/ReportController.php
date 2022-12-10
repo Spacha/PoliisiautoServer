@@ -27,7 +27,7 @@ class ReportController extends Controller
     public function index()
     {
         $organization = currentOrganization();
-        $this->authorize('view-reports', $organization);
+        $this->authorize('list-reports', $organization);
 
         return new ReportCollection($organization->reports);
     }
