@@ -15,7 +15,7 @@ class AdministratorController extends Controller
 {
     // TODO: Remove this when implementation is done.
     public function __construct() {
-        throw \Exception("Administrator controller is not finished! At least authorization for each endpoint is required!");
+        throw new \Exception("Administrator controller is not finished! At least authorization for each endpoint is required!");
     }
 
     /**
