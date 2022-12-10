@@ -13,7 +13,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use App\Models\Organization;
-use App\Models\ReportCase;
 use App\Models\Student;
 use App\Models\Report;
 
@@ -98,7 +97,7 @@ class StudentTest extends TestCase
         $student = $this->actingAsStudent();
         $reports = Report::factory()
             ->forReporter($student)
-            ->for(ReportCase::factory()->for($organization), 'case')
+            ->forNewCaseIn($organization)
             ->count(3)->create();
 
         $response = $this->getJson($this->api("students/$student->id/reports"));
@@ -112,7 +111,7 @@ class StudentTest extends TestCase
         $student = $this->actingAsStudent();
         $reports = Report::factory()
             ->forReporter($reporterStudent)
-            ->for(ReportCase::factory()->for($organization), 'case')
+            ->forNewCaseIn($organization)
             ->for($student, 'bully')
             ->count(3)->create();
 

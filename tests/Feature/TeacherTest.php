@@ -100,7 +100,7 @@ class TeacherTest extends TestCase
         $teacher = $this->actingAsTeacher();
         $reports = Report::factory()
             ->forReporter($teacher)
-            ->for(ReportCase::factory()->for($organization), 'case')
+            ->forNewCaseIn($organization)
             ->count(3)->create();
 
         $response = $this->getJson($this->api("teachers/$teacher->id/reports"));
@@ -114,7 +114,7 @@ class TeacherTest extends TestCase
         $teacher = $this->actingAsTeacher();
         $reports = Report::factory()
             ->forReporter($reporterTeacher)
-            ->for(ReportCase::factory()->for($organization), 'case')
+            ->forNewCaseIn($organization)
             ->for($teacher, 'handler')
             ->count(3)->create();
 

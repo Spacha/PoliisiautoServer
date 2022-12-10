@@ -11,6 +11,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+use App\Models\Organization;
+use App\Models\ReportCase;
 use App\Models\User;
 
 /**
@@ -27,7 +29,7 @@ class ReportFactory extends Factory
     {
         return [
             'description' => fake()->realTextBetween(10, 200),
-            'is_anonymous' => rand(0, 1),
+            'is_anonymous' => 0,
         ];
     }
 
@@ -54,5 +56,18 @@ class ReportFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'reporter_id' => $reporter->id,
         ]);
+    }
+
+    /**
+     * Indicate that the report should be created under
+     * a new case that belongs to given organization.
+     *
+     * @return static
+     */
+    public function forNewCaseIn(Organization $organization)
+    {
+        return $this->for(
+            ReportCase::factory()->for($organization)->create(), 'case'
+        );
     }
 }
