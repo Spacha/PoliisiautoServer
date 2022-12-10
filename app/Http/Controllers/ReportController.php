@@ -119,6 +119,7 @@ class ReportController extends Controller
     /**
      * List all the messages in the report.
      *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function messages($id)
@@ -139,10 +140,10 @@ class ReportController extends Controller
     public function updateCase(Request $request, $id)
     {
         $report = Report::findOrFail($id);
-        $this->authorize('update-report-case', $report);
+        $this->authorize('update-case-of-report', $report);
 
         $request->validate([
-            'report_case_id' => 'numeric|exists:report_cases,id',
+            'case_id' => 'numeric|exists:report_cases,id',
         ]);
 
         // associate the report with the new case

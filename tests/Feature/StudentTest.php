@@ -78,7 +78,7 @@ class StudentTest extends TestCase
         ]);
     }
 
-    public function test_other_students_cannot_delete()
+    public function test_other_student_cannot_delete()
     {
         $organization = Organization::factory()->create();
         $student = Student::factory()->forOrganization($organization->id)->create();

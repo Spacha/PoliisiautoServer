@@ -47,7 +47,7 @@ class ReportFactory extends Factory
 
     /**
      * Indicate that the report should belong to given reporter.
-     * This is a workaround since 'reporter' relationship doesn't wor 100 %.
+     * This is a workaround since 'reporter' relationship doesn't work 100 %.
      *
      * @return static
      */

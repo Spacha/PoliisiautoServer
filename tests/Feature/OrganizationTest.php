@@ -61,7 +61,7 @@ class OrganizationTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_members_can_show()
+    public function test_member_can_show()
     {
         $organization = Organization::factory()->create();
         $this->actingAsTeacher($organization->id);
@@ -73,7 +73,7 @@ class OrganizationTest extends TestCase
         ]);
     }
 
-    public function test_nonmembers_cannot_show()
+    public function test_nonmember_cannot_show()
     {
         $organization = Organization::factory()->create();
 
@@ -100,7 +100,7 @@ class OrganizationTest extends TestCase
         ]);
     }
 
-    public function test_nonmembers_cannot_update()
+    public function test_nonmember_cannot_update()
     {
         $organization = Organization::factory()->create();
         $administrator = $this->actingAsAdministrator();

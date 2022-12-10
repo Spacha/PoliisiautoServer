@@ -81,7 +81,7 @@ class TeacherTest extends TestCase
         ]);
     }
 
-    public function test_other_teachers_cannot_delete()
+    public function test_other_teacher_cannot_delete()
     {
         $organization = Organization::factory()->create();
         $teacher = Teacher::factory()->forOrganization($organization->id)->create();

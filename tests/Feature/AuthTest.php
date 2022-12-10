@@ -88,5 +88,11 @@ class AuthTest extends TestCase
     {
         $response = $this->getJson($this->api("profile"));
         $response->assertUnauthorized();
+
+        $response = $this->getJson($this->api("reports"));
+        $response->assertUnauthorized();
+
+        $response = $this->getJson($this->api("organizations"));
+        $response->assertUnauthorized();
     }
 }

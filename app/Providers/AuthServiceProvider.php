@@ -231,7 +231,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         // Only teachers of the organization can update a case of a report.
-        Gate::define('update-case-of-case', function (User $user, Report $report) {
+        Gate::define('update-case-of-report', function (User $user, Report $report) {
             return $user->isTeacher() && $user->organization_id == $report->case->organization_id;
         });
 

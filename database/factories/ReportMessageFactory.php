@@ -11,6 +11,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+use App\Models\User;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReportMessage>
  */
@@ -38,6 +40,19 @@ class ReportMessageFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'is_anonymous' => 1,
+        ]);
+    }
+
+    /**
+     * Indicate that the message should belong to given author.
+     * This is a workaround since 'author' relationship doesn't work 100 %.
+     *
+     * @return static
+     */
+    public function forAuthor(User $author)
+    {
+        return $this->state(fn (array $attributes) => [
+            'author_id' => $author->id,
         ]);
     }
 }
