@@ -170,7 +170,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // Only members of the organization can store cases to it.
         Gate::define('create-report-case', function (User $user, Organization $organization) {
-            return $user->organization_id == $case->organization_id;
+            return $user->organization_id == $organization->id;
         });
 
         // Only teachers of the organization can view a case.

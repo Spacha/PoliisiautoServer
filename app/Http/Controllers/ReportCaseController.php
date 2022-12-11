@@ -59,7 +59,7 @@ class ReportCaseController extends Controller
      */
     public function show($id)
     {
-        $case = ReportCase::findOrFail($id)
+        $case = ReportCase::findOrFail($id);
         $this->authorize('show-report-case', $case);
 
         return $case;
@@ -74,7 +74,7 @@ class ReportCaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $case = ReportCase::findOrFail($id)
+        $case = ReportCase::findOrFail($id);
         $this->authorize('update-report-case', $case);
 
         $request->validate([
@@ -92,7 +92,7 @@ class ReportCaseController extends Controller
      */
     public function destroy($id)
     {
-        $case = ReportCase::findOrFail($id)
+        $case = ReportCase::findOrFail($id);
         $this->authorize('delete-report-case', $case);
 
         // NOTE: All reports and other data in the case will remain.
@@ -107,7 +107,7 @@ class ReportCaseController extends Controller
      */
     public function reports($id)
     {
-        $case = ReportCase::findOrFail($id)
+        $case = ReportCase::findOrFail($id);
         $this->authorize('list-reports-in-case', $case);
 
         return ReportCase::findOrFail($id)->reports;
