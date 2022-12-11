@@ -108,6 +108,24 @@ class ReportTest extends TestCase
         ]);
     }
 
+    public function test_member_teacher_can_show()
+    {
+        $organization = Organization::factory()->create();
+        $student = Student::factory()->for($organization)->create();
+        $report = Report::factory()
+            ->forReporter($student)
+            ->forNewCaseIn($organization)
+            ->create();
+
+        $this->actingAsTeacher($organization->id);  // act as other teacher
+        $response = $this->getJson($this->api("reports/$report->id"));
+        $response->assertOk()->assertJson([
+            'description' => $report->description,
+            'reporter_id' => $student->id,
+            'is_anonymous' => $report->is_anonymous,
+        ]);
+    }
+
     public function test_anonymous_does_not_show_reporter()
     {
         $organization = Organization::factory()->create();

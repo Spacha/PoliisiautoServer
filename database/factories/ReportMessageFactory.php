@@ -27,7 +27,7 @@ class ReportMessageFactory extends Factory
     {
         return [
             'content' => fake()->realTextBetween(5, 100),
-            'is_anonymous' => rand(0, 1),
+            'is_anonymous' => 0,
         ];
     }
 
