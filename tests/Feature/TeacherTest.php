@@ -21,6 +21,16 @@ class TeacherTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a teacher belonging to the organization.
+     *  - Create 4 teachers under the organization.
+     * Test:
+     *  - Get the teachers.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the response contains 4 students.
+     */
     public function test_teacher_can_list()
     {
         $organization = Organization::factory()->create();
@@ -31,6 +41,15 @@ class TeacherTest extends TestCase
         $response->assertOk()->assertJsonCount(5);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the teacher.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_teacher_can_show()
     {
         $organization = Organization::factory()->create();
@@ -43,6 +62,16 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a teacher belonging to the organization.
+     * Test:
+     *  - Get the teacher.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_student_can_show()
     {
         $organization = Organization::factory()->create();
@@ -56,6 +85,14 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create and login as a teacher.
+     * Test:
+     *  - Update the teacher.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the update is saved to the database.
+     */
     public function test_can_update()
     {
         $teacher = $this->actingAsTeacher();
@@ -71,6 +108,14 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create and login as a teacher.
+     * Test:
+     *  - Delete the teacher.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the user is deleted from the database.
+     */
     public function test_self_can_delete()
     {
         $teacher = $this->actingAsTeacher();
@@ -81,6 +126,16 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Craete an organization
+     *  - Create and login as a teacher belonging to the organization.
+     *  - Create and login as another teacher belonging to the organization.
+     * Test:
+     *  - Try deleting the teacher.
+     *  - Make sure the response is 'forbidden'.
+     *  - Make sure the user remains in the database.
+     */
     public function test_other_teacher_cannot_delete()
     {
         $organization = Organization::factory()->create();
@@ -94,10 +149,20 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a teacher belonging to the organization.
+     *  - Create 3 reports under the organization, made by the teacher.
+     * Test:
+     *   - Get the user's reports.
+     *   - Make sure the response is 'OK'.
+     *   - Make sure the response contains 3 reports.
+     */
     public function test_self_can_list_reports()
     {
         $organization = Organization::factory()->create();
-        $teacher = $this->actingAsTeacher();
+        $teacher = $this->actingAsTeacher($organization->id);
         $reports = Report::factory()
             ->forReporter($teacher)
             ->forNewCaseIn($organization)
@@ -107,15 +172,27 @@ class TeacherTest extends TestCase
         $response->assertOk()->assertJsonCount(3);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a teacher belonging to the organization (reporter).
+     *  - Create and login as a teacher belonging to the organization.
+     *  - Create 3 reports under the organization, made by the reporter teacher
+     *    and assigned to the teacher.
+     * Test:
+     *   - Get the user's assigned reports.
+     *   - Make sure the response is 'OK'.
+     *   - Make sure the response contains 3 reports.
+     */
     public function test_self_can_list_assigned_reports()
     {
         $organization = Organization::factory()->create();
-        $reporterTeacher = Teacher::factory()->create();
-        $teacher = $this->actingAsTeacher();
+        $reporterTeacher = Teacher::factory()->for($organization)->create();
+        $teacher = $this->actingAsTeacher($organization->id);
         $reports = Report::factory()
             ->forReporter($reporterTeacher)
             ->forNewCaseIn($organization)
-            ->for($teacher, 'handler')
+            ->forHandler($teacher)
             ->count(3)->create();
 
         $response = $this->getJson($this->api("teachers/$teacher->id/assigned-reports"));

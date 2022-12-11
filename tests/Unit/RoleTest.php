@@ -14,6 +14,12 @@ use App\Role;
 
 class RoleTest extends TestCase
 {
+    /**
+     * Preparations:
+     *   None
+     * Test:
+     *   Make sure all the role constants match with the role indices.
+     */
     public function test_roles_match_with_indices()
     {
         $roleIndices = [
@@ -26,6 +32,12 @@ class RoleTest extends TestCase
             $this->assertTrue($roleIndex == $role);
     }
 
+    /**
+     * Preparations:
+     *   None
+     * Test:
+     *   Make sure all the human readable role strings match with the role indices.
+     */
     public function test_human_readable_roles_match_with_indices()
     {
         $roleStrings = [
@@ -38,6 +50,12 @@ class RoleTest extends TestCase
             $this->assertTrue(Role::forHumans($roleIndex) == $roleString);
     }
 
+    /**
+     * Preparations:
+     *   None
+     * Test:
+     *   Make sure all the role constants match with their models.
+     */
     public function test_role_models_match_with_roles()
     {
         $roleClasses = [
@@ -50,6 +68,13 @@ class RoleTest extends TestCase
             $this->assertTrue(Role::getRoleModel($role)::class == $roleClass);
     }
 
+    /**
+     * Preparations:
+     *   None
+     * Test:
+     *   Try getting an undefined role using an index larger than the limit.
+     *   Make sure that an exception is thrown.
+     */
     public function test_role_model_for_invalid_role_throws()
     {
         $thrown = false;

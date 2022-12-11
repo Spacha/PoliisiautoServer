@@ -22,6 +22,17 @@ class ReportMessageTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a report belonging to the organization made by the student.
+     *  - Create a report message made by the student but do not store it.
+     * Test:
+     *  - Store a new message under the report using the post data.
+     *  - Make sure the response is 'created'.
+     *  - Make sure the message is saved to the database.
+     */
     public function test_reporter_can_create()
     {
         $organization = Organization::factory()->create();
@@ -44,6 +55,16 @@ class ReportMessageTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a case belonging to the organization.
+     * Test:
+     *  - Get the case.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_author_can_show()
     {
         $organization = Organization::factory()->create();
@@ -63,6 +84,18 @@ class ReportMessageTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report message belonging to a report in the organization,
+     *    made by the student.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the message.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_member_teacher_can_show()
     {
         $organization = Organization::factory()->create();
@@ -83,6 +116,18 @@ class ReportMessageTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create an anonymous report message belonging to a report in the organization,
+     *    made by the student.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the message.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found but author's info is hidden.
+     */
     public function test_anonymous_does_not_show_author()
     {
         $organization = Organization::factory()->create();
@@ -91,8 +136,7 @@ class ReportMessageTest extends TestCase
             ->forAuthor($student)
             ->for(Report::factory()->forReporter($student)
                 ->forNewCaseIn($organization)->create()
-            )
-            ->anonymous()->create();
+            )->anonymous()->create();
 
         $this->actingAsTeacher($organization->id);  // act as other teacher
         $response = $this->getJson($this->api("report-messages/$message->id"));
@@ -104,7 +148,19 @@ class ReportMessageTest extends TestCase
         ]);
     }
 
-    public function test_other_student_cannot_show() {
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report message belonging to a report in the organization,
+     *    made by the student.
+     *  - Create and login as another student belonging to the organization.
+     * Test:
+     *  - Get the message.
+     *  - Make sure the response is 'forbidden'.
+     */
+    public function test_other_student_cannot_show()
+    {
         $organization = Organization::factory()->create();
         $authorStudent = Student::factory()->for($organization)->create();
         $message = ReportMessage::factory()
@@ -118,6 +174,17 @@ class ReportMessageTest extends TestCase
         $response->assertForbidden();
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a report message belonging to a report in the organization,
+     *    made by the student.
+     * Test:
+     *  - Update the message.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the update is saved to the database.
+     */
     public function test_self_can_update()
     {
         $organization = Organization::factory()->create();
@@ -142,6 +209,17 @@ class ReportMessageTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a report message belonging to a report in the organization,
+     *    made by the student.
+     * Test:
+     *  - Delete the message.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the report message is deleted from the database.
+     */
     public function test_self_can_delete()
     {
         $organization = Organization::factory()->create();
@@ -157,6 +235,17 @@ class ReportMessageTest extends TestCase
         $this->assertDatabaseMissing('report_messages', ['id' => $message->id]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a report message belonging to a report in the organization,
+     *    made by the student.
+     * Test:
+     *  - Update the message.
+     *  - Make sure the response is 'forbidden'.
+     *  - Make sure the report message remains in the database.
+     */
     public function test_other_student_cannot_delete()
     {
         $organization = Organization::factory()->create();

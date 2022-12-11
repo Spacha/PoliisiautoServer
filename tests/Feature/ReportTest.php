@@ -23,13 +23,21 @@ class ReportTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create 3 reports belonging to the organization, made by a new student.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the report list.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the response contains 3 reports.
+     */
     public function test_member_teacher_can_list()
     {
-        // create organization, 3 reports to it and test if
-        // a member teacher can see them
         $organization = Organization::factory()->create();
         Report::factory()->forNewCaseIn($organization)
-            ->state(['reporter_id' => Student::factory()->for($organization)->create()->id])
+            ->forReporter(Student::factory()->for($organization)->create())
             ->count(3)->create();
         $this->actingAsTeacher($organization->id);
 
@@ -37,13 +45,20 @@ class ReportTest extends TestCase
         $response->assertOk()->assertJsonCount(3);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create 3 reports belonging to the organization, made by a new student.
+     *  - Create and login as another student belonging to the organization.
+     * Test:
+     *  - Get the report list.
+     *  - Make sure the response is 'forbidden'.
+     */
     public function test_student_cannot_list()
     {
-        // create organization, 3 reports to it and test if
-        // a member student can see them (should not!)
         $organization = Organization::factory()->create();
         Report::factory()->forNewCaseIn($organization)
-            ->state(['reporter_id' => Student::factory()->for($organization)->create()->id])
+            ->forReporter(Student::factory()->for($organization)->create())
             ->count(3)->create();
         $this->actingAsStudent($organization->id);
 
@@ -51,12 +66,23 @@ class ReportTest extends TestCase
         $response->assertForbidden();
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization (bully)
+     *  - Create a teacher belonging to the organization (handler)
+     *  - Create a report but do not store it.
+     *  - Create and login as another student belonging to the organization.
+     * Test:
+     *  - Store the report using the post data.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the report is saved to the database.
+     */
     public function test_student_can_create_with_handler()
     {
         $organization = Organization::factory()->create();
         $bully = Student::factory()->for($organization)->create();
         $handler = Teacher::factory()->for($organization)->create();
-        // make: create a fake report but do not store to database
         $report = Report::factory()->make();
         $postData = [
             'description'   => $report->description,
@@ -72,11 +98,22 @@ class ReportTest extends TestCase
         $this->assertDatabaseHas('reports', $postData + ['reporter_id' => $student->id]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization (bully)
+     *  - Create a teacher belonging to the organization (handler)
+     *  - Create a report but do not store it.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Store the report using the post data.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the report is saved to the database.
+     */
     public function test_teacher_can_create_without_handler()
     {
         $organization = Organization::factory()->create();
         $bully = Student::factory()->for($organization)->create();
-        // make: create a fake report but do not store to database
         $report = Report::factory()->make();
         $postData = [
             'description'   => $report->description,
@@ -91,6 +128,16 @@ class ReportTest extends TestCase
         $this->assertDatabaseHas('reports', $postData + ['reporter_id' => $teacher->id]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     * Test:
+     *  - Get the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_self_can_show()
     {
         $organization = Organization::factory()->create();
@@ -108,6 +155,17 @@ class ReportTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_member_teacher_can_show()
     {
         $organization = Organization::factory()->create();
@@ -126,6 +184,18 @@ class ReportTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a teacher belonging to the organization.
+     *  - Create an anonymous report belonging to a the organization,
+     *    made by a new student belonging to the organziation.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found but reporter's info is hidden.
+     */
     public function test_anonymous_does_not_show_reporter()
     {
         $organization = Organization::factory()->create();
@@ -146,6 +216,16 @@ class ReportTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a report belonging to a the organization,
+     *    made by a new student belonging to the organziation.
+     *  - Create and login as another student belonging to the organization.
+     * Test:
+     *  - Get the report.
+     *  - Make sure the response is 'forbidden'.
+     */
     public function test_other_student_cannot_show()
     {
         $organization = Organization::factory()->create();
@@ -160,6 +240,16 @@ class ReportTest extends TestCase
         $response->assertForbidden();
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     * Test:
+     *  - Update the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the udpate is saved to the database.
+     */
     public function test_reporter_can_update()
     {
         $organization = Organization::factory()->create();
@@ -180,6 +270,16 @@ class ReportTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     * Test:
+     *  - Delete the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the report is deleted from the database.
+     */
     public function test_reporter_can_delete()
     {
         $organization = Organization::factory()->create();
@@ -194,6 +294,17 @@ class ReportTest extends TestCase
         $this->assertDatabaseMissing('reports', ['id' => $report->id]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Delete the report as the teacher.
+     *  - Make sure the response is 'forbidden'.
+     *  - Make sure the report remains in the database.
+     */
     public function test_teacher_cannot_delete()
     {
         $organization = Organization::factory()->create();
@@ -209,6 +320,17 @@ class ReportTest extends TestCase
         $this->assertDatabaseHas('reports', ['id' => $report->id]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create and login as a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     *  - Create 3 report messaged under the report, made by the student.
+     * Test:
+     *  - Get the report messages belonging to the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the response contains 3 report messages.
+     */
     public function test_reporter_can_list_messages()
     {
         $organization = Organization::factory()->create();
@@ -226,6 +348,18 @@ class ReportTest extends TestCase
         $response->assertOk()->assertJsonCount(3);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     *  - Create 3 report messaged under the report, made by the student.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the report messages belonging to the report.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the response contains 3 report messages.
+     */
     public function test_member_teacher_can_list_messages()
     {
         $organization = Organization::factory()->create();
@@ -244,6 +378,16 @@ class ReportTest extends TestCase
         $response->assertOk()->assertJsonCount(3);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     *  - Create and login as another student belonging to the organization.
+     * Test:
+     *  - Get the report messages belonging to the report.
+     *  - Make sure the response is 'forbidden'.
+     */
     public function test_other_student_cannot_list_messages()
     {
         $organization = Organization::factory()->create();
@@ -262,6 +406,18 @@ class ReportTest extends TestCase
         $response->assertForbidden();
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a student belonging to the organization.
+     *  - Create a report belonging to a the organization, made by the student.
+     *  - Create a new report case belonging to the organization.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Update the report's case to the new one.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the update is saved to the database.
+     */
     public function test_member_teacher_can_update_case()
     {
         $organization = Organization::factory()->create();

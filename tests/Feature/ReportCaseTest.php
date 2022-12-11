@@ -22,10 +22,18 @@ class ReportCaseTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create 3 report cases belonging to the organization.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the case list.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the response contains 3 cases.
+     */
     public function test_member_teacher_can_list()
     {
-        // create organization, 3 cases to it and test if
-        // a member teacher can see them
         $organization = Organization::factory()->create();
         ReportCase::factory()->for($organization)->count(3)->create();
         $this->actingAsTeacher($organization->id);
@@ -34,6 +42,15 @@ class ReportCaseTest extends TestCase
         $response->assertOk()->assertJsonCount(3);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create 3 report cases belonging to the organization.
+     *  - Create and login as a student belonging to the organization.
+     * Test:
+     *  - Get the case list.
+     *  - Make sure the response is 'forbidden'.
+     */
     public function test_member_student_cannot_list()
     {
         $organization = Organization::factory()->create();
@@ -44,6 +61,16 @@ class ReportCaseTest extends TestCase
         $response->assertForbidden();
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a report case belonging to the organization but do not store it.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Store a new case using the post data.
+     *  - Make sure the response is 'created'.
+     *  - Make sure the case is saved to the database.
+     */
     public function test_member_teacher_can_create()
     {
         $organization = Organization::factory()->create();
@@ -57,6 +84,16 @@ class ReportCaseTest extends TestCase
         $this->assertDatabaseHas('report_cases', $postData);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a case belonging to the organization.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Get the case.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the relevant fields are found.
+     */
     public function test_member_teacher_can_show()
     {
         $organization = Organization::factory()->create();
@@ -70,6 +107,16 @@ class ReportCaseTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a case belonging to the organization.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Update the case.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the update is saved to the database.
+     */
     public function test_member_teacher_can_update()
     {
         $organization = Organization::factory()->create();
@@ -87,6 +134,16 @@ class ReportCaseTest extends TestCase
         ]);
     }
 
+    /**
+     * Preparations:
+     *  - Create an organization.
+     *  - Create a case belonging to the organization.
+     *  - Create and login as a teacher belonging to the organization.
+     * Test:
+     *  - Delete the case.
+     *  - Make sure the response is 'OK'.
+     *  - Make sure the case is deleted from the database.
+     */
     public function test_member_teacher_can_delete()
     {
         $organization = Organization::factory()->create();

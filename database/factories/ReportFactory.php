@@ -59,6 +59,18 @@ class ReportFactory extends Factory
     }
 
     /**
+     * Indicate that the report should be assigned to given handler.
+     *
+     * @return static
+     */
+    public function forHandler(User $handler)
+    {
+        return $this->state(fn (array $attributes) => [
+            'handler_id' => $handler->id,
+        ]);
+    }
+
+    /**
      * Indicate that the report should be created under
      * a new case that belongs to given organization.
      *
