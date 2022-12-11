@@ -88,10 +88,9 @@ class AuthServiceProvider extends ServiceProvider
                    ($user->isTeacher() && $user->organization_id == $student->organization_id);
         });
 
-        // Self AND teachers of the organization can list a student's involved reports
+        // Only teachers of the organization can list a student's involved reports
         Gate::define('list-student-involved-reports', function (User $user, Student $student) {
-            return ($user->id == $student->id) ||
-                   ($user->isTeacher() && $user->organization_id == $student->organization_id);
+            return $user->isTeacher() && $user->organization_id == $student->organization_id;
         });
 
         ////////////////////////////////////////////////////////////////////////
