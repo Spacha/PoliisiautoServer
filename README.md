@@ -67,3 +67,10 @@ The tests can be run by (see [here](https://laravel.com/docs/9.x/testing#running
 ```bash
 $ php artisan test
 ```
+
+### Database seeding
+
+If you want, you can "seed" the database with sample users and organizations using:
+```bash
+$ php artisan db:seed
+```
