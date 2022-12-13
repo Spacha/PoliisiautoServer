@@ -33,7 +33,7 @@ $ composer install
 
 Create a `.env` file by copying the `.env.example` (see [here](https://laravel.com/docs/9.x/configuration) for more information)
 ```bash
-$ cp
+$ cp .env.example .env
 ```
 
 Change necessary values in the `.env` files. Most important lines are these:
@@ -55,7 +55,7 @@ Migrate the database (see [here](https://laravel.com/docs/9.x/migrations) for mo
 $ php artisan migrate:fresh
 ```
 
-NOTE: You may need to change the permissions of some folders (usually everything under `storage`).
+**NOTE:** You may need to change the permissions of some folders (usually everything under `storage`).
 
 ```bash
 $ chmod 0777 -R storage
@@ -65,6 +65,5 @@ $ chmod 0777 -R storage
 
 The tests can be run by (see [here](https://laravel.com/docs/9.x/testing#running-tests) for more information):
 ```bash
-$ php artisan test
 $ php artisan test
 ```
