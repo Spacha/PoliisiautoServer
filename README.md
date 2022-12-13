@@ -8,6 +8,8 @@ See [this Google Drive document](https://docs.google.com/spreadsheets/d/1WYGZZfE
 
 The server offers a REST API that is used mainly by the mobile application that is developed alongside this server side.
 
+See the complete **[API desctiption here](https://documenter.getpostman.com/view/3550280/2s8YzUwMLQ#auth-info-5fd01ded-b632-4259-b02d-26f74ddd579e)**.
+
 ## Authentication
 
 The API requires authentication as the data is extremely sensitive. The API is mostly accessed per-user basis.
