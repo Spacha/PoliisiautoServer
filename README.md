@@ -45,7 +45,7 @@ DB_PASSWORD=secret
 
 These should obviously match your database configuration. You need to have a database with that name before it can be initialized.
 
-Generate a application key:
+Generate an application key:
 ```bash
 $ php artisan key:generate
 ```
