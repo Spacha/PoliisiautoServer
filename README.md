@@ -8,11 +8,7 @@ This server offers an API for various clients such as mobile applications (speci
 
 See the complete **[API description here](https://documenter.getpostman.com/view/3550280/2s8YzUwMLQ#auth-info-5fd01ded-b632-4259-b02d-26f74ddd579e)**.
 
-## Authentication
-
-The API requires authentication as the data is extremely sensitive. The API is mostly accessed per-user basis.
-
-## Development
+## Getting started
 
 This software is build on Laravel 9 and requires a (PHP) web server capable of running it as well as a MySQL database. See the requirements in more detail in Laravel documentation: https://laravel.com/docs/9.x.
 
