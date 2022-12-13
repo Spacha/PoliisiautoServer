@@ -70,3 +70,7 @@ If you want, you can "seed" the database with sample users and organizations usi
 ```bash
 $ php artisan db:seed
 ```
+
+## License
+
+PoliisiautoServer is licensed under a 2-clause BSD license.
