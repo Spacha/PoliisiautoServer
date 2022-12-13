@@ -1,5 +1,7 @@
 # Poliisiauto server
 
+![Logo of Poliisiauto](docs/logo-text-0.5x.png)
+
 A server for an application where users can report bullying to a trusted adult.
 
 See [this Google Drive document](https://docs.google.com/spreadsheets/d/1WYGZZfEpqy50AALHSY2IM9s3xUBot-i0YONzvU3Gz-4/edit#gid=1449701033) for initial server specification.
