@@ -22,7 +22,7 @@ Access your server using `ssh` or other means. Navigate to the folder where you 
 
 Clone the project:
 ```bash
-$ git clone https://github.com/Spacha/PoliisiautoServer
+$ git clone https://github.com/Spacha/PoliisiautoServer.git
 ```
 
 Install the dependencies using `composer`.
