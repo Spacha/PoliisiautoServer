@@ -1,3 +1,9 @@
+## Important notice!
+
+**This is a prototype and must not be used in practice under any circumstances! The developers of this application do not take any responsibility, legal or otherwise, of using this application!**
+
+---
+
 # Poliisiauto server
 
 ![Logo of Poliisiauto](docs/logo-text-0.5x.png)
