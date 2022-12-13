@@ -73,4 +73,4 @@ $ php artisan db:seed
 
 ## License
 
-PoliisiautoSERVER is licensed under a 2-clause BSD license. See [LICENSE](https://github.com/Spacha/PoliisiautoServer/LICENSE) for more details.
+PoliisiautoSERVER is licensed under a 2-clause BSD license. See [LICENSE](https://github.com/Spacha/PoliisiautoServer/blob/master/LICENSE) for more details.
