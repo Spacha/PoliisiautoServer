@@ -6,7 +6,7 @@ See [this Google Drive document](https://docs.google.com/spreadsheets/d/1WYGZZfE
 
 This server offers an API for various clients such as mobile applications (specifically for [PoliisiautoApp](https://github.com/Spacha/PoliisiautoApp)). The API has a public endpoint for authentication and a large set of protected endpoints for authenticated users.
 
-See the complete **[API desctiption here](https://documenter.getpostman.com/view/3550280/2s8YzUwMLQ#auth-info-5fd01ded-b632-4259-b02d-26f74ddd579e)**.
+See the complete **[API description here](https://documenter.getpostman.com/view/3550280/2s8YzUwMLQ#auth-info-5fd01ded-b632-4259-b02d-26f74ddd579e)**.
 
 ## Authentication
 
