@@ -37,6 +37,7 @@ class AuthTest extends TestCase
             'email'         => $user->email,
             'password'      => 'password',
             'device_name'   => 'Ellin Oneplus 8',
+            'api_key'       => 't3st-apikey'
         ]);
 
         $response->assertOk();
