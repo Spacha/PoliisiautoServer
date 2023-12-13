@@ -59,7 +59,8 @@ class AuthController extends Controller
         $request->validate([
             'email'         => 'required|email',
             'password'      => 'required|string',
-            'device_name'   => 'required|string'
+            'device_name'   => 'required|string',
+            'api_key'       => 'required|string|in:' . env('POLIISIAUTO_API_KEY')   // FIXME: Nonstandard way.
         ]);
 
         // get the user with the right class type ('role model')

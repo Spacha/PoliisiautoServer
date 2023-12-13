@@ -110,8 +110,8 @@ class Report extends Model
      */
     public function open() : Report
     {
-        $this->opened_at = now();
-        return $this;
+        // NOTE: opened_at is not in $fillable
+        $this->update(['opened_at' => now()]);
     }
 
     /**
@@ -121,8 +121,8 @@ class Report extends Model
      */
     public function close() : Report
     {
-        $this->closed_at = now();
-        return $this;
+        // NOTE: closed_at is not in $fillable
+        $this->update(['closed_at' => now()]);
     }
 
     /**
